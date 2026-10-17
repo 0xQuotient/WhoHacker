@@ -1,0 +1,698 @@
+<title>WhoHacker</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap">
+<style>
+/* Layout concept: an app, not an article. One chunky action per screen, a bottom bar for Continue, Halloween palette on black. */
+:root{
+  --bg:#0D0A12; --surface:#1A1424; --surface2:#261B38; --line:#3A2C52;
+  --fg:#FFFFFF; --muted:#BDB0D4; --ink:#0D0A12;
+  --orange:#FF7A1A; --orange-d:#B84800;
+  --purple:#8B3DFF; --purple-d:#5A1CB5; --purple-soft:#2A1650;
+  --green:#39FF14; --green-d:#1C9E00; --green-soft:#0F2A0C;
+  --font:"Nunito","Avenir Next","Helvetica Neue",Arial,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--bg); color:var(--fg); font:700 16px/1.45 var(--font);
+  padding-block:16px 40px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+body.has-foot{padding-bottom:150px}
+.shell{max-width:640px;margin:0 auto}
+h1,h2,h3,p{margin:0}
+h1{font-size:clamp(2rem,8vw,2.7rem);font-weight:900;line-height:1.1;text-wrap:balance}
+h2{font-size:clamp(1.3rem,5vw,1.7rem);font-weight:900;line-height:1.2;text-wrap:balance}
+h3{font-size:1.05rem;font-weight:800}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--green);outline-offset:3px}
+[tabindex="-1"]:focus{outline:none}
+
+.wm{font-weight:900;font-size:1.5rem;letter-spacing:-.01em}
+.wm b{color:var(--orange);font-weight:900}
+.wm span{color:var(--green)}
+.hero{text-align:center;padding-top:18px;display:grid;justify-items:center;gap:10px}
+.mascot{width:104px;height:auto}
+.hero .sub{color:var(--muted);font-weight:700;font-size:1.05rem;max-width:30ch}
+.stack{display:grid;gap:14px;margin-top:26px}
+.meta2{text-align:center;color:var(--muted);font-size:.85rem;margin-top:16px}
+
+.btn{display:inline-block;border:0;border-radius:16px;padding:15px 22px;font:900 .95rem/1 var(--font);letter-spacing:.08em;text-transform:uppercase;background:var(--green);color:var(--ink);box-shadow:0 5px 0 var(--green-d);text-align:center}
+.btn:active:not([disabled]){transform:translateY(5px);box-shadow:0 0 0 transparent}
+.btn.block{display:block;width:100%}
+.btn.purple{background:var(--purple);color:#fff;box-shadow:0 5px 0 var(--purple-d)}
+.btn.orange{background:var(--orange);color:var(--ink);box-shadow:0 5px 0 var(--orange-d)}
+.btn.ghost{background:var(--surface);color:var(--fg);border:2px solid var(--line);box-shadow:0 5px 0 var(--line)}
+.btn[disabled]{background:var(--surface2);color:#7F719A;box-shadow:0 5px 0 var(--line);cursor:not-allowed}
+
+.sec{margin-top:40px}
+.kick{color:var(--orange);font-weight:900;letter-spacing:.14em;text-transform:uppercase;font-size:.78rem;margin-bottom:6px}
+.samples{display:grid;gap:10px;margin-top:10px}
+.sample{background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.sample b{font-weight:900;font-size:1.05rem}
+.sample span{color:var(--muted);font-size:.85rem}
+.card{background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:16px}
+.dd{margin-top:28px}
+.dd summary{cursor:pointer;font-weight:900;list-style:none;display:flex;justify-content:space-between;gap:10px}
+.dd summary::-webkit-details-marker{display:none}
+.dd summary::after{content:"+";color:var(--green);font-size:1.3rem;line-height:1}
+.dd[open] summary::after{content:"–"}
+.dd h3{margin-top:18px;color:var(--orange)}
+.dl{list-style:none;margin:8px 0 0;padding:0}
+.dl li{padding:9px 0;border-top:2px solid var(--line)}
+.dl .n{font-weight:900;display:block}
+.dl .d{font-size:.9rem;color:var(--muted);font-weight:700}
+.dl .code{display:block;margin-top:2px;font-size:.72rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--green)}
+.tree li.cls{display:block;font-weight:900;color:var(--orange);font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;margin-top:10px;padding:0;border:0}
+.fine{margin-top:34px;color:var(--muted);font-size:.8rem;font-weight:600;text-align:center}
+
+.qtop{display:flex;align-items:center;gap:14px;margin-top:4px}
+.x{background:none;border:0;color:var(--muted);font-size:1.6rem;line-height:1;padding:6px 8px;font-weight:900}
+.pbar{flex:1;height:16px;background:var(--surface2);border-radius:10px;overflow:hidden}
+.pbar i{display:block;height:100%;min-width:16px;background:var(--green);border-radius:10px;position:relative;transition:width .25s}
+.pbar i::after{content:"";position:absolute;left:8px;right:8px;top:4px;height:4px;border-radius:2px;background:rgba(255,255,255,.4)}
+.q{margin-top:30px}
+.q .kick{color:var(--purple)}
+.q h2{color:var(--fg)}
+.lane-tag{display:inline-block;background:var(--purple-soft);border:2px solid var(--purple);color:#fff;border-radius:12px;padding:4px 12px;font-weight:900;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px}
+.opts{display:grid;gap:12px;margin-top:24px}
+.opt{display:flex;align-items:center;gap:14px;text-align:left;width:100%;padding:14px 16px;background:var(--surface);border:2px solid var(--line);border-bottom-width:5px;border-radius:16px}
+.opt:hover{background:var(--surface2)}
+.opt.on{border-color:var(--purple);background:var(--purple-soft)}
+.opt .lv{flex:none;width:30px;height:30px;border:2px solid var(--line);border-radius:10px;display:grid;place-items:center;font-weight:900;font-size:.85rem;color:var(--muted)}
+.opt.on .lv{background:var(--purple);border-color:var(--purple);color:#fff}
+.opt .txt{display:flex;flex-direction:column;min-width:0}
+.opt .ot{font-weight:800}
+.opt .od{font-size:.85rem;color:var(--muted);font-weight:600}
+.foot{position:fixed;left:0;right:0;bottom:0;background:var(--bg);border-top:2px solid var(--line);padding:14px max(16px,env(safe-area-inset-right,0px)) calc(14px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.foot .in{max-width:640px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.foot .grp{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.link{background:none;border:0;padding:8px 2px;color:var(--muted);font-weight:900;letter-spacing:.06em;text-transform:uppercase;font-size:.8rem}
+.link:hover{color:var(--fg)}
+.link[disabled]{opacity:.35;cursor:default}
+.intro{display:grid;justify-items:center;text-align:center;gap:14px;margin-top:30px}
+.intro .rules{list-style:none;padding:0;margin:8px 0 0;display:grid;gap:10px;width:100%;text-align:left}
+.intro .rules li{background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:12px 16px;font-weight:700;color:var(--muted)}
+
+.rtop{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.res{padding-top:6px}
+.tagcard{margin-top:20px;background:var(--purple);border-bottom:6px solid var(--purple-d);border-radius:22px;padding:clamp(20px,5vw,30px)}
+.tagcard .lab{font-weight:900;letter-spacing:.14em;text-transform:uppercase;font-size:.78rem;color:#E4D3FF}
+.tag{font-weight:900;font-size:clamp(1.9rem,7vw,2.9rem);line-height:1.08;margin-top:10px;text-wrap:balance;overflow-wrap:anywhere}
+.tagnote{margin-top:12px;font-weight:700;color:#F1E8FF}
+.key{margin-top:12px;display:inline-block;background:rgba(13,10,18,.35);border-radius:10px;padding:4px 10px;font-size:.78rem;font-weight:800;color:#fff}
+.acts{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
+.tagcard .btn.ghost{background:rgba(13,10,18,.35);border-color:transparent;box-shadow:0 5px 0 rgba(13,10,18,.45);color:#fff}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+.stat{background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:12px;text-align:center}
+.stat b{display:block;font-size:1.5rem;font-weight:900;color:var(--orange)}
+.stat span{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:800}
+.sec h2{margin-bottom:4px}
+.sec .help{color:var(--muted);font-size:.92rem;font-weight:600}
+.spider{width:100%;max-width:560px;height:auto;display:block;margin:10px auto 0}
+.spider .ring{fill:none;stroke:var(--line);stroke-width:1.5}
+.spider .spoke{stroke:var(--line);stroke-width:1.5}
+.spider .area{fill:var(--orange);fill-opacity:.3;stroke:var(--orange);stroke-width:3;stroke-linejoin:round}
+.spider .dot{fill:var(--green)}
+.spider .lbl{fill:var(--fg);font:800 12px var(--font)}
+.spider .val{fill:var(--green);font:900 12px var(--font)}
+.spider .rl{fill:var(--muted);font:700 9px var(--font)}
+.sbars{display:grid;gap:12px;margin-top:14px}
+.sb{display:grid;grid-template-columns:8.6rem 1fr 2.2rem;gap:10px;align-items:center;font-weight:800;font-size:.92rem}
+.sb .track{height:14px;background:var(--surface2);border-radius:8px;overflow:hidden}
+.sb .track i{display:block;height:100%;background:var(--purple);border-radius:8px}
+.sb.top .track i{background:var(--orange)}
+.sb .v{text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
+.diag{margin-top:18px;display:grid;gap:10px;color:var(--muted);font-weight:600;font-size:.95rem}
+.diag b{color:var(--fg);font-weight:900}
+.tree{margin-top:14px;display:grid;gap:10px}
+.lane{background:var(--surface);border:2px solid var(--line);border-radius:16px}
+.lane summary{cursor:pointer;display:flex;justify-content:space-between;gap:12px;padding:13px 16px;font-weight:900;list-style:none}
+.lane summary::-webkit-details-marker{display:none}
+.lane summary .sc{color:var(--orange);font-variant-numeric:tabular-nums}
+.lane ul{list-style:none;margin:0;padding:0 16px 12px;display:grid;gap:8px}
+.lane li{display:grid;grid-template-columns:1fr auto;gap:2px 12px;align-items:center;border-top:2px solid var(--line);padding-top:8px;font-size:.92rem;font-weight:700}
+.lane li>*{min-width:0}
+.lane .st{grid-column:1/-1;font-size:.7rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--purple)}
+.pips{display:inline-flex;gap:4px;align-items:center}
+.pips i{width:11px;height:11px;border-radius:50%;border:2px solid var(--line)}
+.pips i.f{background:var(--green);border-color:var(--green)}
+.pips span{font-size:.72rem;color:var(--muted);margin-left:6px;min-width:5.2rem;font-weight:800}
+.map{display:grid;gap:12px;margin-top:14px}
+.mcard{background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:16px}
+.mcard h3{margin-bottom:6px;color:var(--orange);font-size:.95rem;letter-spacing:.06em;text-transform:uppercase;font-weight:900}
+.mcard ul{margin:0;padding-left:1.1rem;display:grid;gap:5px;font-size:.92rem;color:var(--muted);font-weight:600}
+.mcard p{font-size:.92rem;color:var(--muted);font-weight:600}
+.mcard p b{color:var(--fg)}
+.mcard.wide{background:var(--green-soft);border-color:var(--green)}
+.mcard.wide h3{color:var(--green)}
+.mcard.wide p{color:#E5FFE0}
+
+.halves{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.half{border-radius:18px;padding:16px;background:var(--surface);border:2px solid var(--line);border-bottom-width:5px;min-width:0}
+.half.ha{border-color:var(--orange)}
+.half.hs{border-color:var(--green)}
+.hl{font-size:.72rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.hn{font-size:1.5rem;font-weight:900;margin-top:4px;line-height:1.1;overflow-wrap:anywhere}
+.ha .hn{color:var(--orange)}
+.hs .hn{color:var(--green)}
+.hq{font-weight:900;margin-top:8px}
+.hd{color:var(--muted);font-weight:600;font-size:.9rem;margin-top:6px}
+.hd b{color:var(--fg);font-weight:900}
+.hc{margin-top:10px;font-size:.72rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--green)}
+.card h3{color:var(--orange);font-size:.95rem;letter-spacing:.06em;text-transform:uppercase;font-weight:900}
+.card.read,.card.note{margin-top:12px}
+.card.read ul{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:12px}
+.card.read li{display:grid;grid-template-columns:3.4rem 1fr;gap:12px;align-items:start;font-weight:600;color:var(--muted);font-size:.93rem}
+.card.read li b{color:var(--fg);font-weight:900}
+.sym{background:var(--purple-soft);border:2px solid var(--purple);border-radius:12px;text-align:center;font-weight:900;color:#fff;padding:4px 0;font-size:1.05rem}
+.card.note{background:var(--purple-soft);border-color:var(--purple)}
+.card.note p{color:#EADFFF;font-weight:600;font-size:.93rem;margin-top:6px}
+.card.dd{margin-top:12px}
+.card.src{margin-top:12px}
+.fine{color:var(--muted);font-weight:600;font-size:.85rem;margin:12px 0 0}
+.btn-link{display:inline-block;margin-top:10px;color:var(--orange);font-weight:900;text-decoration:none}
+.card a{color:var(--green);font-weight:800;text-underline-offset:3px}
+.posts{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:6px}
+@media (max-width:520px){.halves{grid-template-columns:1fr}}
+.tagdemo{margin-top:14px;background:var(--purple);border-bottom:6px solid var(--purple-d);border-radius:18px;padding:18px;text-align:center;font-weight:900;font-size:clamp(1.8rem,7vw,2.6rem);line-height:1.1}
+.rtop.end{justify-content:flex-end}
+.rt-r{display:flex;gap:18px;align-items:center}
+.sym{min-width:3.4rem}
+@media (max-width:520px){
+  .foot .in{flex-direction:column-reverse;align-items:stretch}
+  .foot .grp{justify-content:space-between}
+  .foot .btn{width:100%}
+  .sb{grid-template-columns:7rem 1fr 2rem}
+  .stats{gap:8px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="shell" id="app"></div>
+
+<script>
+const AN={web:'Web',net:'Network',cloud:'Cloud',mob:'Mobile',cry:'Cryptocurrency',hum:'Human',iot:'IoT',bin:'Binary',ai:'AI'};
+const SN={op:'Operator',tool:'Toolsmith',exp:'Exploit Developer',res:'Researcher',re:'Reverse Engineer',st:'Strategist'};
+const AK=Object.keys(AN), SK=Object.keys(SN);
+
+const ADEF={
+  web:'Web applications and APIs',
+  net:'Networks, Active Directory, protocols and Wi-Fi',
+  cloud:'AWS, Azure and GCP: identity, permissions, misconfiguration',
+  mob:'iOS and Android apps and their runtime',
+  cry:'Smart contracts, DeFi protocols, wallets and bridges',
+  hum:'People, process and physical access',
+  iot:'Embedded devices, firmware, hardware interfaces and radio',
+  bin:'Compiled native code and memory corruption',
+  ai:'Machine-learning systems and LLM-based applications'
+};
+const SDEF={
+  op:['Masters existing tools and techniques, then chains what they find','Coding: existing tools do most of the work'],
+  tool:['Builds custom offensive tooling: implants, C2, loaders, automation','Coding: writes custom programs'],
+  exp:['Turns a known bug into a reliable way in','Coding: writes custom, low-level code'],
+  res:['Discovers bugs nobody has reported yet','Coding: reads and writes code to find flaws'],
+  re:['Takes software, firmware or protocols apart to learn how they work','Coding: reads code, uses analysis tools'],
+  st:['Scouts the target, then plans where to hit and in what order','Coding: little needed']
+};
+/* Pairing validity per spec section 5. Columns follow SK order: op, tool, exp, res, re, st. Y common, R rare, N invalid. */
+const V={web:'YYRYRY',net:'YYYYYY',cloud:'YYNYNY',mob:'YRYYYR',cry:'RRYYRR',hum:'YYNRNY',iot:'YRYYYR',bin:'RYYYYN',ai:'YRRYRR'};
+const pairV=(a,s)=>V[a][SK.indexOf(s)];
+
+const LADDER=[
+  ['Never','Have not done this'],
+  ['Tried it','Followed a tutorial, walkthrough or guided lab'],
+  ['Did it on my own','Solved it unaided, such as a lab or CTF with no walkthrough'],
+  ['Done it for real','Used outside practice: a paid test, bug bounty, public write-up or released tool']
+];
+const LEVEL=['Never','Tried','Independent','Real'];
+
+/* Assessment 2 items: [archetype, style, sub-skill, text] */
+const CLASSES={web:['Client Side','Server Side','API'],net:['Radio/Wireless','Active Directory','Protocol'],cloud:['IAM/Access','Container/Orchestration','Serverless/Control-Plane'],mob:['iOS','Android','Mobile Web'],cry:['Solidity/EVM','Bridge','Perceptual'],hum:['Phishing/Vishing','OSINT','On Site'],iot:['Firmware','Hardware','Embedded Protocols'],bin:['Memory Corruption','Kernel'],ai:['Adaptive Malware','Compromise']};
+const ITEMS=[
+  ['web','op','Server-side testing',`Tested a web app's backend for injection or access-control flaws using Burp Suite or a similar proxy.`,'Server Side'],
+  ['web','st','API mapping',`Mapped an API's endpoints, parameters and user roles before testing it.`,'API'],
+  ['web','tool','Client-side tooling',`Wrote a script or browser extension that automated finding XSS or DOM-based flaws.`,'Client Side'],
+  ['web','res','Source review and fuzzing',`Found a bug in a web backend by reading its source code or fuzzing it.`,'Server Side'],
+  ['web','exp','API exploit chaining',`Built or modified a working exploit for an API flaw, such as broken authentication or schema abuse.`,'API'],
+
+  ['net','op','Active Directory compromise',`Compromised hosts in an Active Directory environment using tools such as Impacket or Metasploit.`,'Active Directory'],
+  ['net','st','Active Directory attack paths',`Used BloodHound or similar to plan an Active Directory attack path.`,'Active Directory'],
+  ['net','tool','Tunneling and relay tooling',`Wrote custom tooling for pivoting, tunneling or relaying network traffic.`,'Protocol'],
+  ['net','exp','Network service exploits',`Adapted or wrote an exploit for a vulnerable network service or protocol implementation.`,'Protocol'],
+  ['net','re','Wireless protocol analysis',`Reverse-engineered an undocumented wireless or radio protocol from captures.`,'Radio/Wireless'],
+
+  ['cloud','op','IAM privilege escalation',`Escalated privileges in AWS, Azure or GCP through IAM misconfigurations.`,'IAM/Access'],
+  ['cloud','st','Permission and trust mapping',`Mapped trust relationships and permissions across a cloud tenant to find an attack path.`,'IAM/Access'],
+  ['cloud','tool','Control-plane tooling',`Wrote tooling to enumerate or abuse a cloud provider's APIs or functions.`,'Serverless/Control-Plane'],
+  ['cloud','res','Cloud service flaws',`Found a new misconfiguration pattern or service-level flaw in a cloud service.`,'Serverless/Control-Plane'],
+  ['cloud','op','Container escape',`Escaped a container or abused an exposed Kubernetes component in an authorized test or lab.`,'Container/Orchestration'],
+
+  ['mob','op','Android app testing',`Tested an Android app with tools such as MobSF or Frida.`,'Android'],
+  ['mob','re','iOS app decompilation',`Decompiled an iOS app and traced how one of its features works.`,'iOS'],
+  ['mob','res','Android storage and IPC flaws',`Found a vulnerability in an Android app's local storage, inter-process communication or exported components.`,'Android'],
+  ['mob','tool','iOS instrumentation scripts',`Wrote Frida scripts or other tooling to get past iOS app protections such as certificate pinning.`,'iOS'],
+  ['mob','exp','Hybrid app exploits',`Built a working exploit against a hybrid or WebView-based mobile app.`,'Mobile Web'],
+
+  ['cry','res','Contract review',`Reviewed a smart contract for flaws such as reentrancy, access-control errors or logic bugs.`,'Solidity/EVM'],
+  ['cry','exp','Exploit proofs of concept',`Wrote a proof-of-concept exploit for a smart contract, for example with Foundry.`,'Solidity/EVM'],
+  ['cry','op','Wallet and approval testing',`Tested a wallet or dApp flow for approval phishing or address poisoning, using existing tools or a test environment.`,'Perceptual'],
+  ['cry','st','Bridge and protocol mapping',`Mapped a cross-chain bridge or protocol's architecture, privileged roles and dependencies to find where it could break.`,'Bridge'],
+  ['cry','re','Bytecode analysis',`Decompiled unverified contract bytecode to understand what it does.`,'Solidity/EVM'],
+
+  ['hum','op','Authorized phishing exercises',`Ran an authorized phishing or vishing exercise using existing kits or scripts.`,'Phishing/Vishing'],
+  ['hum','st','OSINT on people and organizations',`Researched an organization's people and structure with OSINT to plan an approach.`,'OSINT'],
+  ['hum','tool','Campaign tooling',`Built infrastructure or tooling for authorized phishing or vishing exercises.`,'Phishing/Vishing'],
+  ['hum','op','Physical access testing',`Tested physical security with authorization: badge cloning, tailgating or lock bypass.`,'On Site'],
+  ['hum','res','On-site attack research',`Studied how in-person pretexting attacks succeed or get detected, and wrote up what you found.`,'On Site'],
+
+  ['iot','op','Device and radio testing',`Tested an IoT device or its Bluetooth or Sub-GHz link using existing tools.`,'Embedded Protocols'],
+  ['iot','re','Firmware analysis',`Extracted firmware from a device and analyzed it with tools such as binwalk or Ghidra.`,'Firmware'],
+  ['iot','res','Firmware bugs',`Found a vulnerability in a device's firmware.`,'Firmware'],
+  ['iot','exp','Hardware-assisted exploits',`Built a working exploit that relied on a hardware technique, such as glitching or fault injection.`,'Hardware'],
+  ['iot','op','Hardware interfaces',`Connected to a device through UART, JTAG or SPI to get a shell or dump memory.`,'Hardware'],
+
+  ['bin','re','Native reverse engineering',`Reverse-engineered a compiled program in Ghidra, IDA or similar to understand its logic.`,'Memory Corruption'],
+  ['bin','exp','Memory-corruption exploits',`Wrote an exploit for a memory-corruption bug such as a stack overflow, heap overflow or use-after-free.`,'Memory Corruption'],
+  ['bin','res','Fuzzing and native code review',`Fuzzed a program or reviewed native code and found a new bug.`,'Memory Corruption'],
+  ['bin','tool','Kernel-level tools',`Wrote a kernel driver, rootkit or other kernel-level offensive tool.`,'Kernel'],
+  ['bin','exp','Kernel exploits',`Wrote or adapted a kernel exploit, or bypassed a kernel mitigation.`,'Kernel'],
+
+  ['ai','op','LLM application testing',`Tested an LLM application for prompt injection or jailbreaks using existing techniques.`,'Compromise'],
+  ['ai','res','Adaptive malware research',`Researched how AI-driven malware evades detection or adapts to a target environment.`,'Adaptive Malware'],
+  ['ai','tool','AI attack tooling',`Built tooling that uses AI to automate attacks or adapt to defenses.`,'Adaptive Malware'],
+  ['ai','st','AI system mapping',`Mapped how an AI product connects to tools, data and permissions to find what an attacker could reach.`,'Compromise'],
+  ['ai','re','Model extraction',`Extracted or reverse-engineered a model's behavior, system prompt or architecture.`,'Compromise']
+];
+
+/* Assessment 1 questions: each option is [text, key]. Archetype questions first, then Style questions. */
+const QA=[
+  {q:`Which would you most like to understand?`,o:[[`How the pages you visit online work, and where that can go wrong`,'web'],[`How devices connect and exchange information, and where that can go wrong`,'net'],[`How files and apps are kept online instead of on your own computer, and where that can go wrong`,'cloud'],[`How the apps on your phone work, and where that can go wrong`,'mob']]},
+  {q:`Which headline would make you stop scrolling?`,o:[[`Thieves steal millions in digital money by finding a flaw in how it works`,'cry'],[`A fake phone call tricks an employee into handing over a password`,'hum'],[`Everyday gadgets like smart doorbells and cameras get hacked`,'iot'],[`A chatbot is tricked into saying things it was told never to say`,'ai']]},
+  {q:`Which would you rather take apart?`,o:[[`A computer program, to see how it works inside`,'bin'],[`A gadget like a doorbell or camera, with a screwdriver`,'iot'],[`An app on your phone, to see what it does behind the scenes`,'mob'],[`An online page, to see how it works behind the scenes`,'web']]},
+  {q:`Which kind of problem feels most like you?`,o:[[`Figuring out why someone would say yes to a request`,'hum'],[`Following digital money to see where it goes`,'cry'],[`Working out who is allowed to open which files and apps online`,'cloud'],[`Tracing how the computers in a company talk to each other`,'net']]},
+  {q:`What do you want to read about next?`,o:[[`How mistakes in computer programs let people break in`,'bin'],[`How chatbots and other smart programs get fooled`,'ai'],[`How attackers move from one office computer to a whole company`,'net'],[`How scam emails and fake calls work, and how to stop them`,'hum']]},
+  {q:`Which practice setup would you pick?`,o:[[`A workbench with gadgets to open up and tinker with`,'iot'],[`A practice setup with digital money that has hidden flaws`,'cry'],[`A practice account for files and apps stored online, set up with mistakes to find`,'cloud'],[`A practice page online with flaws hidden in it`,'web']]},
+  {q:`Which project would you most like to show off?`,o:[[`A phone app I poked at until it showed me its secrets`,'mob'],[`A message that makes a chatbot break its own rules`,'ai'],[`A way to break into a program by tricking it`,'bin'],[`A map showing how one computer after another in a company gets taken over`,'net']]},
+  {q:`Which skill would you most like to be known for?`,o:[[`Spotting the flaw hidden in an online page`,'web'],[`Getting past the protections on a phone app`,'mob'],[`Talking your way past a front desk with a believable story`,'hum'],[`Making a program crash on purpose to find out why`,'bin']]},
+  {q:`Which news story would you most want to investigate?`,o:[[`Private company files left open on an online storage account`,'cloud'],[`A digital-money platform loses millions because of a bug in how it was built`,'cry'],[`A baby monitor or smart lock that strangers can control`,'iot'],[`A virtual assistant that leaks private details when asked the right way`,'ai']]}
+];
+const QS=[
+  {q:`Your target has a known weakness. What is the most satisfying way in?`,o:[[`Use the right ready-made programs and combine what they find`,'op'],[`Build my own program to do it faster`,'tool'],[`Make the weakness work every single time`,'exp'],[`Figure out where it came from and look for the next one`,'res']]},
+  {q:`A program gives you confusing results. What do you do?`,o:[[`Learn that program inside out until it makes sense`,'op'],[`Open it up to see how it works inside`,'re'],[`Use what it showed me to plan my next move`,'st'],[`Build something to sort through the results for me`,'tool']]},
+  {q:`A new program was just released. What do you do first?`,o:[[`Take it apart to see how it works inside`,'re'],[`Look for flaws nobody has reported yet`,'res'],[`Turn a known weakness in it into a break-in that works every time`,'exp'],[`Work out who uses it and where it sits inside a company`,'st']]},
+  {q:`You have a free weekend. Which project?`,o:[[`Polish a break-in until it works on the first try`,'exp'],[`Work out how a mystery program does its job`,'re'],[`Build a helper program that does a boring task for me`,'tool'],[`Draw a map of a company's systems and where to strike first`,'st']]},
+  {q:`Which would you be proudest to publish?`,o:[[`A break-in that works every time against a known flaw`,'exp'],[`A write-up explaining how a mystery program works inside`,'re'],[`A free program that other hackers use`,'tool'],[`A report on a brand-new flaw I discovered`,'res']]},
+  {q:`A teammate asks for help on a practice attack. What do you offer?`,o:[[`Run the right tools and techniques for the job`,'op'],[`Break down how the target is built`,'re'],[`Hunt for a new kind of flaw in it`,'res'],[`Plan the order of attack from what we know about the target`,'st']]},
+  {q:`Which skill would you most like to practice?`,o:[[`Getting fast and smooth with the best existing tools`,'op'],[`Reading code and files that are hard to understand`,'re'],[`Writing programs that automate my work`,'tool'],[`Testing ideas until something unexpected breaks`,'res']]},
+  {q:`A client wants results by Friday. What is your edge?`,o:[[`I know the standard tools and tricks and use them quickly`,'op'],[`I can make a flaw work reliably, not just once`,'exp'],[`I find flaws other people miss`,'res'],[`I study the target well so no effort is wasted`,'st']]},
+  {q:`Which would you rather be handed?`,o:[[`A toolbox of the best existing programs`,'op'],[`A flaw that almost works, ready to finish off`,'exp'],[`A blank editor to build my own program`,'tool'],[`A folder of information about a target to plan from`,'st']]}
+];
+const Q1=[...QA.map(x=>({...x,t:'a'})),...QS.map(x=>({...x,t:'s'}))];
+let QQ=Q1; /* the questions as asked this run: same set, shuffled order and option positions */
+const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const freshQ=()=>[...shuf(Q1.filter(q=>q.t==='a')),...shuf(Q1.filter(q=>q.t==='s'))].map(q=>({...q,o:shuf(q.o)}));
+
+/* Learning map content */
+const CORE=[
+  'Networking basics: TCP/IP, DNS, HTTP, common ports and protocols',
+  'Linux command line and basic Windows administration',
+  'How authentication, sessions and permissions work',
+  'Understanding what code and queries do (an HTTP request, a SQL statement, a short script)',
+  'Methodology, note-taking and reporting',
+  'Scope, authorization and legal boundaries'
+];
+const SADD={
+  op:'Deep tool mastery, methodology, result interpretation and technique chaining',
+  tool:'Software engineering, OS internals, and how defenses detect activity',
+  exp:'Assembly, memory layout, debuggers, and exploit mitigations and their bypasses',
+  res:'Code review, fuzzing, protocol analysis, and patience with dead ends',
+  re:'Disassemblers and decompilers, calling conventions and file formats',
+  st:'OSINT methods, enumeration, system architecture and attack-path reasoning'
+};
+const AADD={
+  web:'HTTP, cookies and sessions, JavaScript, SQL and the common web flaw classes',
+  net:'Active Directory, Windows and Linux internals, common network protocols and pivoting',
+  cloud:'IAM models, the core services of one provider (AWS, Azure or GCP) and identity-based attack paths',
+  mob:'Android or iOS app structure, app packaging and runtime instrumentation basics',
+  cry:'How Ethereum and the EVM work, Solidity and common DeFi flaw patterns',
+  hum:'Pretexting and influence principles, OSINT sources, physical security basics and rules of engagement',
+  iot:'Embedded Linux, firmware formats, serial and hardware interfaces and wireless basics',
+  bin:'C and memory layout, assembly, debuggers and how executables load',
+  ai:'How models and LLM applications are built, prompt injection patterns and data and tool permissions'
+};
+const PRACTICE={
+  web:'PortSwigger Web Security Academy',
+  net:'Active Directory labs on TryHackMe or Hack The Box',
+  cloud:'flAWS.cloud and flAWS2.cloud',
+  mob:'OWASP MASTG and its practice apps',
+  cry:'Ethernaut and Damn Vulnerable DeFi',
+  hum:'a lab you control, such as a self-run phishing-awareness simulation',
+  iot:'OWASP IoTGoat',
+  bin:'pwn.college and ROP Emporium',
+  ai:'Gandalf by Lakera and similar prompt-injection games'
+};
+
+/* ---------- scoring ---------- */
+const rankKeys=(o,keys)=>keys.slice().sort((x,y)=>(o[y]-o[x])||(keys.indexOf(x)-keys.indexOf(y)));
+
+/* Fair tie-break: a fixed scramble of the scores, so equal scores never favor a lane by list order. Same answers, same tag. */
+function jitter(seed){
+  let h=2166136261;for(const c of String(seed)){h=Math.imul(h^c.charCodeAt(0),16777619)>>>0}
+  return k=>{let x=Math.imul(h^(k.charCodeAt(0)*131+k.charCodeAt(k.length-1)*7+k.length),2654435761)>>>0;x^=x>>>15;x=Math.imul(x,2246822519)>>>0;return (x%1000)/100000};
+}
+/* Calibration multipliers (set by simulation so that random answers favor no lane or Style). Used only to choose the tag, never shown. */
+function scoreA2(ans){
+  const aS={},aM={},sS={},sM={},aE={},sE={};
+  AK.forEach(k=>{aS[k]=0;aM[k]=0;aE[k]=false});
+  SK.forEach(k=>{sS[k]=0;sM[k]=0;sE[k]=false});
+  ITEMS.forEach(([a,s],i)=>{
+    const p=ans[i]||0;
+    aS[a]+=p;aM[a]+=3;sS[s]+=p;sM[s]+=3;
+    if(p>=2){aE[a]=true;sE[s]=true}
+  });
+  const A={},S={};
+  AK.forEach(k=>A[k]=aS[k]/aM[k]*100);
+  SK.forEach(k=>S[k]=sS[k]/sM[k]*100);
+  return {A,S,aE,sE};
+}
+function pairOK(a,s,ev){
+  const v=pairV(a,s);
+  if(v==='N')return false;
+  if(v==='R'&&ev)return !!(ev.aE[a]&&ev.sE[s]);
+  return true;
+}
+function tagA2(r){
+  const J=jitter(AK.map(k=>Math.round(r.A[k]*100)).join(',')+'|'+SK.map(k=>Math.round(r.S[k]*100)).join(','));
+  const ra={},rs={};
+  AK.forEach(k=>ra[k]=r.A[k]+J(k));SK.forEach(k=>rs[k]=r.S[k]+J(k));
+  const ar=rankKeys(ra,AK), sr=rankKeys(rs,SK);
+  if(r.A[ar[0]]<20)return {none:true,ar,sr};
+  let a=ar[0], s=sr[0], fell=false;
+  if(!pairOK(a,s,r)){
+    fell=true;
+    let best=null;
+    AK.forEach(x=>SK.forEach(y=>{
+      if(!pairOK(x,y,r))return;
+      const sc=ra[x]+rs[y];
+      if(!best||sc>best.sc+1e-9)best={x,y,sc};
+    }));
+    if(best){a=best.x;s=best.y}
+  }
+  let b=null;
+  ar.forEach(x=>{if(b||x===a||r.A[x]<=0)return;if(pairOK(x,s,r))b=x});
+  let mode='pure',gap=1;
+  if(b){
+    gap=Math.abs(r.A[a]-r.A[b])/Math.max(r.A[a],r.A[b]);
+    mode=gap<=0.15?'hybrid':(gap<=0.40?'second':'pure');
+  }
+  let first=a,other=b;
+  if(b&&r.A[b]>r.A[a]){first=b;other=a}
+  let tag;
+  if(mode==='hybrid')tag=`${AN[first]} × ${AN[other]} ${SN[s]}`;
+  else if(mode==='second')tag=`${AN[a]} (${AN[b]}) ${SN[s]}`;
+  else tag=`${AN[a]} ${SN[s]}`;
+  return {a,s,b,mode,gap,tag,fell,ar,sr};
+}
+function scoreA1(ans){
+  const appear={},pick={};
+  [...AK,...SK].forEach(k=>{appear[k]=0;pick[k]=0});
+  QQ.forEach((q,i)=>{
+    q.o.forEach(o=>appear[o[1]]++);
+    if(ans[i]!=null)pick[q.o[ans[i]][1]]++;
+  });
+  const A={},S={};
+  AK.forEach(k=>A[k]=appear[k]?pick[k]/appear[k]*100:0);
+  SK.forEach(k=>S[k]=appear[k]?pick[k]/appear[k]*100:0);
+  return {A,S};
+}
+function tagA1(r,ans){
+  /* Exact ties are broken by a fixed scramble of the answers, so no lane is favored by list order. Same answers, same tag. */
+  let h=2166136261;(ans||[]).forEach((v,j)=>{const k=v==null||!QQ[j]?'-':QQ[j].o[v][1];for(const c of k)h=Math.imul(h^c.charCodeAt(0),16777619)>>>0});
+  const eps=k=>{let x=Math.imul(h^(k.charCodeAt(0)*131+k.charCodeAt(k.length-1)*7+k.length),2654435761)>>>0;x^=x>>>15;x=Math.imul(x,2246822519)>>>0;return (x%1000)/100000};
+  const A2={},S2={};AK.forEach(k=>A2[k]=r.A[k]+eps(k));SK.forEach(k=>S2[k]=r.S[k]+eps(k));
+  r={A:A2,S:S2};
+  const ar=rankKeys(r.A,AK), sr=rankKeys(r.S,SK);
+  /* The lane leads: take the top Archetype, then its best-fitting valid Style (only invalid pairings are skipped; interest alone does not need evidence). */
+  const a=ar[0];
+  let s=null,bs=-1;
+  SK.forEach(y=>{const v=pairV(a,y);if(v==='N')return;const sc=r.S[y];if(sc>bs+1e-9){bs=sc;s=y}});
+  let b=null;ar.forEach(x=>{if(!b&&x!==a&&r.A[x]>0&&pairV(x,s)!=='N')b=x});
+  let s2=null;sr.forEach(y=>{if(!s2&&y!==s&&r.S[y]>0&&pairV(a,y)!=='N')s2=y});
+  return {a,s,b,s2,tag:`${AN[a]} ${SN[s]}`,ar,sr};
+}
+
+/* ---------- state ---------- */
+const app=document.getElementById('app');
+let S={view:'home',mode:null,i:0,ans:[]};
+
+const MASCOT=`<svg class="mascot" viewBox="0 0 100 110" aria-hidden="true"><path d="M14 98V50C14 26 30 10 50 10s36 16 36 40v48l-12-9-12 9-12-9-12 9-12-9z" fill="#8B3DFF" stroke="#5A1CB5" stroke-width="4" stroke-linejoin="round"/><circle cx="37" cy="48" r="10" fill="#fff"/><circle cx="63" cy="48" r="10" fill="#fff"/><circle cx="40" cy="50" r="5" fill="#0D0A12"/><circle cx="66" cy="50" r="5" fill="#0D0A12"/><rect x="35" y="69" width="20" height="5" rx="2.5" fill="#39FF14"/><rect x="59" y="66" width="4" height="11" rx="1" fill="#39FF14"/></svg>`;
+const WM=`<span class="wm"><b>Who</b><span>Hacker</span></span>`;
+
+/* ---------- views ---------- */
+function homeView(){
+  const aList=AK.map(k=>`<li><span class="n">${AN[k]}</span><span class="d">${ADEF[k]}</span></li>`).join('');
+  const sList=SK.map(k=>`<li><span class="n">${SN[k]}</span><span class="d">${SDEF[k][0]}</span><span class="code">${SDEF[k][1]}</span></li>`).join('');
+  return `
+<div class="rtop end"><button type="button" class="link" data-act="scrollkey">Key ↓</button></div>
+<div class="hero">${MASCOT}${WM}<h1>Which kind of hacker are you?</h1><p class="sub">Get a tag for where you hack and how you hack.</p></div>
+<div class="stack">
+  <button type="button" class="btn block" data-act="intro" data-mode="a1">I'm new here</button>
+  <button type="button" class="btn block purple" data-act="intro" data-mode="a2">I've hacked before</button>
+  ${S.saved?`<button type="button" class="btn block ghost" data-act="viewresults">Back to my results</button>`:''}
+</div>
+<p class="meta2">New: ${Q1.length} questions, about 4 min · Experienced: ${ITEMS.length} items, about 8 min</p>
+${keySection()}
+<p class="fine">Draft v0.1. Scores and pairings will be tuned as people play. Count only lab, CTF or authorized work.</p>`;
+}
+function qTop(pct){
+  return `<div class="qtop"><button type="button" class="x" data-act="home" aria-label="Exit to home">✕</button><div class="pbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(pct)}"><i style="width:${pct.toFixed(1)}%"></i></div></div>`;
+}
+function footBar(left,right){
+  return `<div class="foot"><div class="in"><div class="grp">${left}</div>${right}</div></div>`;
+}
+function introView(){
+  const a2=S.mode==='a2';
+  const rules=a2?[
+    `${ITEMS.length} items, grouped by lane. Say how far you took each one.`,
+    `Count only labs, CTFs, bug bounty and work with permission.`,
+    `Never touched a lane? Tap skip and move on.`,
+    `Using tools well is real skill. You do not have to write code to score high.`
+  ]:[
+    `${Q1.length} quick questions. Tap what sounds most fun.`,
+    `No wrong answers. This is about pull, not skill.`,
+    `You get a tag, a second lane to try, and a place to start.`
+  ];
+  return qTop(0)+`<div class="intro">${MASCOT}<h2>${a2?'Tell us what you have actually done':'Pick what sounds most fun'}</h2><ul class="rules">${rules.map(r=>`<li>${r}</li>`).join('')}</ul><span tabindex="-1" data-focus></span></div>`
+    +footBar('',`<button type="button" class="btn" data-act="begin">Start</button>`);
+}
+function questionView(){
+  const a1=S.mode==='a1',n=total(),cur=S.ans[S.i],last=S.i===n-1;
+  let body;
+  if(a1){
+    const q=QQ[S.i];
+    body=`<div class="q"><p class="kick">${q.t==='a'?'Where you hack':'How you hack'} · ${S.i+1} of ${n}</p><h2 tabindex="-1" data-focus>${q.q}</h2>
+      <div class="opts">${q.o.map((o,j)=>`<button type="button" class="opt${cur===j?' on':''}" data-act="pick" data-v="${j}"><span class="txt"><span class="ot">${o[0]}</span></span></button>`).join('')}</div></div>`;
+  }else{
+    const it=ITEMS[S.i];
+    const idxs=ITEMS.map((x,i)=>x[0]===it[0]?i:-1).filter(i=>i>=0);
+    body=`<div class="q"><span class="lane-tag">${AN[it[0]]} · ${idxs.indexOf(S.i)+1} of ${idxs.length}</span><p class="kick">Have you…</p><h2 tabindex="-1" data-focus>${it[3]}</h2>
+      <div class="opts">${LADDER.map((l,j)=>`<button type="button" class="opt${cur===j?' on':''}" data-act="pick" data-v="${j}"><span class="lv">${j}</span><span class="txt"><span class="ot">${l[0]}</span><span class="od">${l[1]}</span></span></button>`).join('')}</div></div>`;
+  }
+  const left=`<button type="button" class="link" data-act="back"${S.i===0?' disabled':''}>Back</button>`+(a1?'':`<button type="button" class="link" data-act="skip">Skip ${AN[ITEMS[S.i][0]]}</button>`);
+  const right=`<button type="button" class="btn" id="cont" data-act="next"${cur==null?' disabled':''}>${last?'See my tag':'Continue'}</button>`;
+  return qTop(S.i/n*100)+body+footBar(left,right);
+}
+
+function spiderSVG(A){
+  const cx=280,cy=210,R=125,n=AK.length;
+  const pt=(i,r)=>{const t=i*2*Math.PI/n;return [cx+r*Math.sin(t),cy-r*Math.cos(t)]};
+  const f=v=>v.toFixed(1);
+  const rings=[25,50,75,100].map(v=>`<polygon class="ring" points="${AK.map((_,i)=>pt(i,R*v/100).map(f).join(',')).join(' ')}"/>`).join('');
+  const rl=[25,50,75,100].map(v=>`<text class="rl" x="${cx+4}" y="${f(cy-R*v/100-3)}">${v}</text>`).join('');
+  const spokes=AK.map((_,i)=>{const p=pt(i,R);return `<line class="spoke" x1="${cx}" y1="${cy}" x2="${f(p[0])}" y2="${f(p[1])}"/>`}).join('');
+  const poly=AK.map((k,i)=>pt(i,R*Math.max(A[k],1.5)/100).map(f).join(',')).join(' ');
+  const dots=AK.map((k,i)=>{const p=pt(i,R*Math.max(A[k],1.5)/100);return `<circle class="dot" cx="${f(p[0])}" cy="${f(p[1])}" r="4"/>`}).join('');
+  const labels=AK.map((k,i)=>{
+    const t=i*2*Math.PI/n,s=Math.sin(t),c=Math.cos(t);
+    const x=cx+(R+16)*s,y=cy-(R+16)*c;
+    const anchor=s>0.3?'start':(s<-0.3?'end':'middle');
+    const dy=c>0.5?-6:(c<-0.5?10:3);
+    return `<text class="lbl" x="${f(x)}" y="${f(y+dy)}" text-anchor="${anchor}">${AN[k]}<tspan class="val" x="${f(x)}" dy="14">${Math.round(A[k])}</tspan></text>`;
+  }).join('');
+  const label=AK.map(k=>`${AN[k]} ${Math.round(A[k])}`).join(', ');
+  return `<svg class="spider" viewBox="0 0 560 420" role="img" aria-label="Depth by lane out of 100: ${label}">${rings}${spokes}${rl}<polygon class="area" points="${poly}"/>${dots}${labels}</svg>`;
+}
+function bars(Sc,topKey){
+  return `<div class="sbars">`+rankKeys(Sc,SK).map(k=>`<div class="sb${k===topKey?' top':''}"><span>${SN[k]}</span><span class="track"><i style="width:${Math.max(Sc[k],0).toFixed(1)}%"></i></span><span class="v">${Math.round(Sc[k])}</span></div>`).join('')+`</div>`;
+}
+function pips(p){
+  return `<span class="pips" role="img" aria-label="${LEVEL[p]}">${[1,2,3].map(n=>`<i class="${p>=n?'f':''}"></i>`).join('')}<span>${LEVEL[p]}</span></span>`;
+}
+function treeHTML(r,open){
+  return `<div class="tree">`+rankKeys(r.A,AK).map(a=>{
+    const rows=CLASSES[a].map(c=>{const li=ITEMS.map((it,i)=>[it,i]).filter(x=>x[0][0]===a&&x[0][4]===c).map(([it,i])=>`<li><span>${it[2]}</span>${pips(S.ans[i]||0)}<span class="st">${SN[it[1]]}</span></li>`).join('');return li?`<li class="cls">${c}</li>${li}`:''}).join('');
+    return `<details class="lane"${open.includes(a)?' open':''}><summary><span>${AN[a]}</span><span class="sc">${Math.round(r.A[a])}</span></summary><ul>${rows}</ul></details>`;
+  }).join('')+`</div>`;
+}
+function mapHTML(a,s,b,extra){
+  const nocode=(s==='op'||s==='st')?`<div class="mcard wide"><h3>No code needed on this path</h3><p>${SN[s]} work runs on understanding systems and using tools well, like a Web Operator who lives in Burp Suite. You need to understand what code and requests do, but writing programs is optional. Coding widens your options. It does not gate entry.</p></div>`:'';
+  return `<div class="map">
+    ${extra||''}
+    <div class="mcard"><h3>1. Common core</h3><ul>${CORE.map(c=>`<li>${c}</li>`).join('')}</ul></div>
+    <div class="mcard"><h3>2. Your Style adds</h3><p><b>${SN[s]}.</b> ${SADD[s]}.</p></div>
+    <div class="mcard"><h3>3. Your lane adds</h3><p><b>${AN[a]}.</b> ${AADD[a]}.${b?` Secondary lane, ${AN[b]}: ${AADD[b]}.`:''}</p></div>
+    <div class="mcard"><h3>Places to practice</h3><p>${AN[a]}: ${PRACTICE[a]}.${b?` ${AN[b]}: ${PRACTICE[b]}.`:''} Check that each is still available.</p></div>
+    <div class="mcard"><h3>What transfers</h3><p>Trust boundaries, injection-style flaws and privilege models carry across every lane. Switching lanes means relearning the platform, not starting over.</p></div>
+    ${nocode}
+  </div>`;
+}
+function tagCard(tag,note,key,acts){
+  return `<div class="tagcard"><p class="lab">Your hacker tag</p><p class="tag" id="tagtext" tabindex="-1" data-focus>${tag}</p><p class="tagnote">${note}</p>${key?`<span class="key">× evenly split · ( ) secondary</span>`:''}<div class="acts">${acts}</div></div>`;
+}
+function decodeHTML(a,s,b,mode,r,h){
+  h=h||{kick:'Your tag, decoded',title:'Two halves make one tag',pre:''};
+  let aname=AN[a],adef=`<p class="hd">${ADEF[a]}.</p>`;
+  if(b&&mode==='hybrid'){
+    const p=r.A[b]>r.A[a]?b:a,q=p===a?b:a;
+    aname=`${AN[p]} × ${AN[q]}`;
+    adef=`<p class="hd"><b>${AN[p]}:</b> ${ADEF[p]}.</p><p class="hd"><b>${AN[q]}:</b> ${ADEF[q]}.</p>`;
+  }else if(b&&mode==='second'){
+    aname=`${AN[a]} (${AN[b]})`;
+    adef=`<p class="hd"><b>${AN[a]}, main:</b> ${ADEF[a]}.</p><p class="hd"><b>${AN[b]}, secondary:</b> ${ADEF[b]}.</p>`;
+  }
+  const aList=AK.map(k=>`<li><span class="n">${AN[k]}</span><span class="d">${ADEF[k]}</span></li>`).join('');
+  const sList=SK.map(k=>`<li><span class="n">${SN[k]}</span><span class="d">${SDEF[k][0]}</span><span class="code">${SDEF[k][1]}</span></li>`).join('');
+  return `<div class="sec"${h.id?` id="${h.id}"`:''}><p class="kick">${h.kick}</p><h2>${h.title}</h2>${h.pre}
+  <div class="halves">
+    <div class="half ha"><p class="hl">Archetype</p><p class="hn">${aname}</p><p class="hq">Where you hack</p>${adef}</div>
+    <div class="half hs"><p class="hl">Style</p><p class="hn">${SN[s]}</p><p class="hq">How you hack</p><p class="hd">${SDEF[s][0]}.</p><p class="hc">${SDEF[s][1]}</p></div>
+  </div>
+  <div class="card note"><h3>Coding is not a skill level</h3><p>Each Style lists how much coding its work involves. That describes the work, not how good someone is. An Operator who does everything in Burp Suite or another point-and-click tool can be an expert hacker.</p></div>
+  <div class="card read"><h3>Reading the symbols</h3><ul>
+    <li><span class="sym">×</span><span><b>Evenly split.</b> Network × Cloud means both lanes are about equally strong.</span></li>
+    <li><span class="sym">( )</span><span><b>Secondary.</b> Web (IoT) means mostly Web with some IoT. Out loud: “primarily web with some IoT.”</span></li>
+    <li><span class="sym">–</span><span><b>No symbol.</b> One lane clearly leads.</span></li>
+  </ul><p class="fine">Hybrid means two lanes within 15% of each other; secondary means within 40%.</p></div>
+  <div class="card note"><h3>Human is Social Engineering</h3><p>The tag says Human, but the specialty is social engineering, the same archetype as in the OSA. It is its own lane, and it also travels: just as TCP/IP is the heart of networking yet carries into IoT, social engineering is a specialty of its own and shows up inside every other lane.</p></div>
+  <div class="card note"><h3>A quick note</h3><p>Tags are not meant to limit or define you. They are a fast way to share your specialty, like a name tag at a meetup. Skills shift over time, plenty of great hackers work across several lanes, and you can retake this whenever you grow.</p></div>
+  <details class="card dd"><summary>All Archetypes and Styles</summary>
+    <h3>Archetypes: where you hack</h3><ul class="dl">${aList}</ul>
+    <h3>Styles: how you hack</h3><ul class="dl">${sList}</ul>
+  </details>
+  <div class="card src"><h3>Original posts</h3><ul class="posts"><li><a href="https://paragraph.com/@derrickjr/osa" target="_blank" rel="noopener">Offensive Security Archetypes</a></li><li><a href="https://paragraph.com/@derrickjr/technical-hacking-is-social" target="_blank" rel="noopener">Technical Hacking is Social</a></li></ul></div>
+  <div class="card src"><h3>The full document</h3><p class="fine">How the scoring, pairings and both assessments work.</p><a class="btn-link" href="https://claude.ai/code/artifact/5a869950-ffad-46ac-89c7-e53db83adcc9" target="_blank" rel="noopener">Read the spec ↗</a></div></div>`;
+}
+function keySection(){
+  return decodeHTML('web','op',null,'pure',null,{id:'key',kick:'Key',title:'How to read a tag',pre:'<div class="tagdemo">Web Operator</div>'});
+}
+function keyView(){
+  const fromRes=S.from==='result';
+  return `<div class="rtop">${WM}<button type="button" class="link" data-act="${fromRes?'backres':'home'}">← ${fromRes?'Back to results':'Home'}</button></div><div class="res">${keySection()}</div>`;
+}
+function rTop(){return `<div class="rtop">${WM}<div class="rt-r"><button type="button" class="link" data-act="key">Key</button><button type="button" class="link" data-act="home">Home</button></div></div>`}
+function stats(list){return `<div class="stats">${list.map(x=>`<div class="stat"><b>${x[0]}</b><span>${x[1]}</span></div>`).join('')}</div>`}
+
+function resultA1(){
+  const r=scoreA1(S.ans),t=tagA1(r,S.ans);
+  const note=`You were pulled most toward ${AN[t.a]} and the ${SN[t.s]} way of working.${t.b?` You might also like ${AN[t.b]}.`:''}${t.s2?` ${SN[t.s2]} is a good second Style to try.`:''}`;
+  const acts=`<button type="button" class="btn orange" data-act="copy">Copy tag</button><button type="button" class="btn ghost" data-act="key">Key</button><button type="button" class="btn ghost" data-act="intro" data-mode="a2">Try Assessment 2</button><button type="button" class="btn ghost" data-act="intro" data-mode="a1">Retake</button>`;
+  const extra=`<div class="mcard wide"><h3>Your next step</h3><p>Work through the common core while you try one lab in ${AN[t.a]}. Take Assessment 2 after some hands-on time to see your depth across all nine lanes.</p></div>`;
+  return rTop()+`<div class="res">
+    ${tagCard(t.tag,note,false,acts)}
+    ${stats([[Math.round(r.A[t.a])+'%','pull to '+AN[t.a]],[Math.round(r.S[t.s])+'%','pull to '+SN[t.s]],[t.b?AN[t.b]:'—','also try']])}
+    <div class="sec"><p class="kick">Your pull</p><h2>Interest by lane</h2>${spiderSVG(r.A)}</div>
+    <div class="sec"><p class="kick">Your style</p><h2>How you like to work</h2>${bars(r.S,t.s)}</div>
+    <div class="sec"><p class="kick">Level up</p><h2>Where to start</h2>${mapHTML(t.a,t.s,t.b,extra)}</div>
+  </div>`;
+}
+function resultA2(){
+  const r=scoreA2(S.ans),t=tagA2(r);
+  const counts=[0,0,0,0];ITEMS.forEach((_,i)=>counts[S.ans[i]||0]++);
+  const lanes=AK.filter(k=>r.A[k]>0).length;
+  const evidence=`<p><b>Evidence.</b> ${counts[3]} of ${ITEMS.length} items at done-it-for-real, ${counts[2]} on-my-own, ${counts[1]} tried-it.</p>`;
+  if(t.none){
+    const acts=`<button type="button" class="btn" data-act="intro" data-mode="a1">Try Assessment 1</button><button type="button" class="btn ghost" data-act="intro" data-mode="a2">Retake</button>`;
+    return rTop()+`<div class="res">
+      ${tagCard('Not enough evidence yet',`No lane has reached 20 out of 100, so a tag would be a guess. Try more labs, or take Assessment 1 for now.`,false,acts)}
+      ${stats([[lanes,'lanes explored'],[counts[3],'done for real'],[counts[1]+counts[2],'tried or solo']])}
+      <div class="sec"><p class="kick">Your depth</p><h2>Depth by lane</h2>${spiderSVG(r.A)}</div>
+      <div class="sec"><h2>Depth by Style</h2>${bars(r.S,null)}</div>
+    </div>`;
+  }
+  const {a,s,b,mode}=t;
+  const desc=mode==='hybrid'?`Hybrid: ${AN[a]} and ${AN[b]} are evenly matched.`:(mode==='second'?`${AN[a]}-led, with ${AN[b]} as a real secondary.`:`${AN[a]} clearly leads.`);
+  const acts=`<button type="button" class="btn orange" data-act="copy">Copy tag</button><button type="button" class="btn ghost" data-act="key">Key</button><button type="button" class="btn ghost" data-act="intro" data-mode="a2">Retake</button>`;
+  const d=[];
+  if(b&&mode==='hybrid')d.push(`<p><b>Lanes.</b> ${AN[a]} and ${AN[b]} are within ${Math.round(t.gap*100)}% of each other, so the tag shows both.</p>`);
+  else if(b&&mode==='second')d.push(`<p><b>Lanes.</b> Your ${AN[a]} depth is about ${(r.A[a]/r.A[b]).toFixed(1)}× your ${AN[b]} depth.</p>`);
+  else{const nx=t.ar.find(x=>x!==a);d.push(`<p><b>Lanes.</b> ${AN[a]} scores ${Math.round(r.A[a])}. The next lane, ${AN[nx]}, scores ${Math.round(r.A[nx])}.</p>`)}
+  const s2=t.sr.find(x=>x!==t.s);
+  d.push(`<p><b>Style.</b> Your strongest Style is ${SN[t.s]} at ${Math.round(r.S[t.s])}${s2?`, then ${SN[s2]} at ${Math.round(r.S[s2])}`:''}.</p>`);
+  if(t.fell)d.push(`<p><b>Adjusted.</b> Your top scores, ${AN[t.ar[0]]} and ${SN[t.sr[0]]}, are not a pairing the model uses, so the tag shows ${AN[a]} ${SN[s]} instead.</p>`);
+  d.push(evidence);
+  const untouched=ITEMS.map((it,i)=>[it,i]).filter(([it,i])=>it[0]===a&&(S.ans[i]||0)<2).map(([it])=>it[2]);
+  const extra=untouched.length?`<div class="mcard wide"><h3>Next branches in ${AN[a]}</h3><p>Not yet done on your own: ${untouched.join(', ')}. Pick one and work it through without a walkthrough.</p></div>`:`<div class="mcard wide"><h3>Next branches in ${AN[a]}</h3><p>You have done every ${AN[a]} item on your own or for real. Try a second lane, or go deeper in a second Style.</p></div>`;
+  return rTop()+`<div class="res">
+    ${tagCard(t.tag,desc,false,acts)}
+    ${stats([[lanes,'lanes explored'],[counts[3],'done for real'],[Math.round(r.A[a]),AN[a]+' depth']])}
+    <div class="sec"><p class="kick">Your shape</p><h2>Depth by lane</h2>${spiderSVG(r.A)}</div>
+    <div class="sec"><p class="kick">Your style</p><h2>How you work</h2>${bars(r.S,t.s)}<div class="diag">${d.join('')}</div></div>
+    <div class="sec"><p class="kick">Skill tree</p><h2>What you have unlocked</h2>${treeHTML(r,[a,b].filter(Boolean))}</div>
+    <div class="sec"><p class="kick">Level up</p><h2>Learning map</h2>${mapHTML(a,s,b,extra)}</div>
+  </div>`;
+}
+
+/* ---------- render and events ---------- */
+function render(focus){
+  let h='';
+  if(S.view==='home')h=homeView();
+  else if(S.view==='intro')h=introView();
+  else if(S.view==='key')h=keyView();
+  else if(S.view==='q')h=questionView();
+  else h=S.mode==='a1'?resultA1():resultA2();
+  app.innerHTML=h;
+  document.body.classList.toggle('has-foot',S.view==='intro'||S.view==='q');
+  if(focus!==false&&S.view!=='home'){const f=app.querySelector('[data-focus]');if(f)try{f.focus({preventScroll:true})}catch(e){}}
+}
+function go(view){S.view=view;if(view==='result')S.saved={mode:S.mode,ans:S.ans.slice()};render();try{window.scrollTo(0,0)}catch(e){}}
+function total(){return S.mode==='a1'?QQ.length:ITEMS.length}
+function advance(){
+  if(S.i<total()-1){S.i++;render();try{window.scrollTo(0,0)}catch(e){}}else go('result');
+}
+function copyTag(btn){
+  const el=document.getElementById('tagtext');if(!el)return;
+  const text=`${el.textContent} (WhoHacker)`;
+  const done=m=>{const o=btn.textContent;btn.textContent=m;setTimeout(()=>{btn.textContent=o},1800)};
+  const fallback=()=>{
+    try{const r=document.createRange();r.selectNodeContents(el);const sel=window.getSelection();sel.removeAllRanges();sel.addRange(r);done('Selected: Ctrl or Cmd+C')}catch(e){done('Copy unavailable')}
+  };
+  try{navigator.clipboard.writeText(text).then(()=>done('Copied'),fallback)}catch(e){fallback()}
+}
+app.addEventListener('click',e=>{
+  const b=e.target.closest('[data-act]');
+  if(!b||b.disabled)return;
+  const act=b.dataset.act;
+  if(act==='home'){S={view:'home',mode:null,i:0,ans:[],saved:S.saved};go('home')}
+  else if(act==='intro'){S={view:'intro',mode:b.dataset.mode,i:0,ans:[],saved:S.saved};go('intro')}
+  else if(act==='key'){S.from=S.view==='result'?'result':'home';go('key')}
+  else if(act==='backres'){go('result')}
+  else if(act==='viewresults'){S.mode=S.saved.mode;S.ans=S.saved.ans.slice();go('result')}
+  else if(act==='scrollkey'){const k=document.getElementById('key');if(k)try{k.scrollIntoView({behavior:'smooth'})}catch(x){k.scrollIntoView()}}
+  else if(act==='begin'){S.i=0;S.ans=[];if(S.mode==='a1')QQ=freshQ();go('q')}
+  else if(act==='pick'){S.ans[S.i]=Number(b.dataset.v);render(false);const c=document.getElementById('cont');if(c)try{c.focus({preventScroll:true})}catch(x){}}
+  else if(act==='next'){if(S.ans[S.i]!=null)advance()}
+  else if(act==='back'){if(S.i>0){S.i--;render()}}
+  else if(act==='skip'){
+    const a=ITEMS[S.i][0];
+    ITEMS.forEach((it,i)=>{if(it[0]===a&&i>=S.i)S.ans[i]=0});
+    let nxt=S.i;while(nxt<ITEMS.length&&ITEMS[nxt][0]===a)nxt++;
+    if(nxt>=ITEMS.length)go('result');else{S.i=nxt;render();try{window.scrollTo(0,0)}catch(x){}}
+  }
+  else if(act==='copy')copyTag(b);
+});
+render();
+</script>
