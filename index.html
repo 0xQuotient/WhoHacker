@@ -530,8 +530,7 @@ function questionView(){
       <div class="opts">${q.o.map((o,j)=>`<button type="button" class="opt${cur===j?' on':''}" data-act="pick" data-v="${j}"><span class="txt"><span class="ot">${o[0]}</span></span></button>`).join('')}</div></div>`;
   }else{
     const it=ITEMS[S.i];
-    const idxs=ITEMS.map((x,i)=>x[0]===it[0]?i:-1).filter(i=>i>=0);
-    body=`<div class="q"><span class="lane-tag">${AN[it[0]]} · ${idxs.indexOf(S.i)+1} of ${idxs.length}</span><p class="kick">Have you…</p><h2 tabindex="-1" data-focus>${it[3]}</h2>
+    body=`<div class="q"><p class="kick">Have you… · ${S.i+1} of ${n}</p><h2 tabindex="-1" data-focus>${it[3]}</h2>
       <div class="opts">${LADDER.map((l,j)=>`<button type="button" class="opt${cur===j?' on':''}" data-act="pick" data-v="${j}"><span class="lv">${j}</span><span class="txt"><span class="ot">${l[0]}</span><span class="od">${l[1]}</span></span></button>`).join('')}</div></div>`;
   }
   const left=`<button type="button" class="link" data-act="back"${S.i===0?' disabled':''}>Back</button>`;
