@@ -66,7 +66,39 @@ button{font:inherit;color:inherit;cursor:pointer}
 .dl .n{font-weight:900;display:block}
 .dl .d{font-size:.9rem;color:var(--muted);font-weight:700}
 .dl .code{display:block;margin-top:2px;font-size:.72rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--green)}
-.tree li.cls{display:block;font-weight:900;color:var(--orange);font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;margin-top:10px;padding:0;border:0}
+.tree li.cls{display:block;grid-column:1/-1;font-weight:900;color:var(--orange);font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;margin-top:10px;padding:0;border:0}
+
+.vz{margin-top:12px}
+.vz>input{position:absolute;opacity:0;pointer-events:none}
+.vzt{display:flex;flex-wrap:wrap;gap:8px}
+.vzt label{border:2px solid var(--line);border-radius:999px;padding:7px 14px;font-weight:900;font-size:.85rem;color:var(--muted);cursor:pointer;background:var(--surface)}
+.vzp{display:none;margin-top:14px}
+#vz0:checked~.vzt label[for=vz0],#vz1:checked~.vzt label[for=vz1],#vz2:checked~.vzt label[for=vz2],#vz3:checked~.vzt label[for=vz3],#vz4:checked~.vzt label[for=vz4]{background:var(--purple);border-color:var(--purple);color:#fff}
+#vz0:focus-visible~.vzt label[for=vz0],#vz1:focus-visible~.vzt label[for=vz1],#vz2:focus-visible~.vzt label[for=vz2],#vz3:focus-visible~.vzt label[for=vz3],#vz4:focus-visible~.vzt label[for=vz4]{outline:3px solid var(--green);outline-offset:2px}
+#vz0:checked~.p0,#vz1:checked~.p1,#vz2:checked~.p2,#vz3:checked~.p3,#vz4:checked~.p4{display:block}
+.vznote{color:var(--muted);font-weight:600;font-size:.85rem;margin:10px 0 0}
+.vzh{font-size:1rem;margin:18px 0 6px}
+.h0{background:var(--line)}.h1{background:var(--purple)}.h2{background:var(--orange)}.h3{background:var(--green)}
+.sb .track i.h0{background:var(--line)}.sb .track i.h1{background:var(--purple)}.sb .track i.h2{background:var(--orange)}.sb .track i.h3{background:var(--green)}
+.hist{display:grid;gap:8px}
+.hl{display:grid;grid-template-columns:6.8rem 1fr 3.6rem;gap:10px;align-items:center;font-weight:800;font-size:.85rem}
+.hl .stack{display:flex;height:16px;border-radius:8px;overflow:hidden;background:var(--surface2);border:2px solid var(--line)}
+.hl .stack i{display:block;height:100%}
+.hl>span:first-child{text-transform:none;letter-spacing:0;font-size:.82rem}
+.hl .hcnt{color:var(--muted);font-weight:700;font-size:.8rem;text-align:right;white-space:nowrap}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin:12px 0 0;font-size:.8rem;font-weight:700;color:var(--muted)}
+.legend .lg{display:inline-flex;align-items:center;gap:6px}
+.legend .lg i{width:12px;height:12px;border-radius:3px;display:inline-block}
+.grid7{display:grid;grid-template-columns:6.8rem repeat(6,1fr);gap:4px;margin-top:12px;align-items:center}
+.gh{font-size:.56rem;font-weight:900;color:var(--muted);text-align:center;line-height:1.1;overflow-wrap:anywhere}
+.gr{font-weight:800;font-size:.8rem;text-transform:none;letter-spacing:0}
+.gc{display:grid;place-items:center;height:30px;border-radius:8px;font-weight:900;font-size:.9rem;border:2px solid var(--line)}
+.gc.none{color:var(--line);border-style:dashed}
+.gc.l0{background:var(--surface2);color:var(--muted)}.gc.l1{background:var(--purple-soft);color:#EADFFF;border-color:var(--purple)}.gc.l2{background:#3A2008;color:var(--orange);border-color:var(--orange)}.gc.l3{background:var(--green);color:#0D0A12;border-color:var(--green)}
+.lane li>.st{grid-column:2;grid-row:1;justify-self:end;text-align:right}
+.lane li>.pips{grid-column:1/-1;grid-row:2}
+.lane ul.nx li{display:block;border-top:2px solid var(--line);padding:8px 0 0;margin-top:8px;font-size:.9rem;font-weight:600;color:var(--muted)}
+.lane p.vznote{padding:0 2px}
 .fine{margin-top:34px;color:var(--muted);font-size:.8rem;font-weight:600;text-align:center}
 
 .qtop{display:flex;align-items:center;gap:14px;margin-top:4px}
@@ -538,6 +570,51 @@ function treeHTML(r,open){
     return `<details class="lane"${open.includes(a)?' open':''}><summary><span>${AN[a]}</span><span class="sc">${Math.round(r.A[a])}</span></summary><ul>${rows}</ul></details>`;
   }).join('')+`</div>`;
 }
+function histHTML(){
+  const cnt=[0,0,0,0];ITEMS.forEach((_,i)=>cnt[S.ans[i]||0]++);
+  const n=ITEMS.length,cl=['h0','h1','h2','h3'];
+  const all=LEVEL.map((l,j)=>`<div class="sb"><span>${LADDER[j][0]}</span><span class="track"><i class="${cl[j]}" style="width:${(cnt[j]/n*100).toFixed(1)}%"></i></span><span class="v">${cnt[j]}</span></div>`).join('');
+  const lanes=AK.map(a=>{
+    const c=[0,0,0,0];ITEMS.forEach((it,i)=>{if(it[0]===a)c[S.ans[i]||0]++});
+    const segs=c.map((v,j)=>v?`<i class="${cl[j]}" style="width:${v/5*100}%" title="${LADDER[j][0]}: ${v}"></i>`:'').join('');
+    return `<div class="hl"><span>${AN[a]}</span><span class="stack" role="img" aria-label="${AN[a]}: ${c.map((v,j)=>LADDER[j][0]+' '+v).join(', ')}">${segs}</span><span class="hcnt">${c[3]}·${c[2]}·${c[1]}·${c[0]}</span></div>`;
+  }).join('');
+  const key=LADDER.map((l,j)=>`<span class="lg"><i class="${cl[j]}"></i>${l[0]}</span>`).join('');
+  return `<p class="vznote">How many of your ${n} answers sit at each level.</p><div class="sbars">${all}</div>
+  <h3 class="vzh">Answers by lane</h3><div class="hist">${lanes}</div><p class="legend">${key}</p><p class="vznote">Numbers on the right: done for real · on my own · tried · never.</p>`;
+}
+function gridHTML(){
+  const head=SK.map(k=>`<span class="gh">${SN[k]}</span>`).join('');
+  const rows=AK.map(a=>{
+    const cells=SK.map(y=>{
+      const v=ITEMS.map((it,i)=>[it,i]).filter(([it])=>it[0]===a&&it[1]===y).map(([,i])=>S.ans[i]||0);
+      if(!v.length)return `<span class="gc none" aria-label="${AN[a]} ${SN[y]}: no item">·</span>`;
+      const m=Math.max(...v);
+      return `<span class="gc l${m}" aria-label="${AN[a]} ${SN[y]}: highest level ${LADDER[m][0]}, ${v.length} item${v.length>1?'s':''}">${m}</span>`;
+    }).join('');
+    return `<span class="gr">${AN[a]}</span>${cells}`;
+  }).join('');
+  return `<p class="vznote">Each cell is the highest level you reported for the items in that Archetype and Style pairing. 0 never, 1 tried, 2 on my own, 3 done for real. A dot means the assessment has no item for that pairing.</p><div class="grid7">${'<span></span>'+head+rows}</div>`;
+}
+function nextHTML(r){
+  const ranked=rankKeys(r.A,AK);
+  const blocks=ranked.map((a,ri)=>{
+    const todo=CLASSES[a].map(c=>{
+      const open=ITEMS.filter((it,i)=>it[0]===a&&it[4]===c&&(S.ans[i]||0)<2).map(it=>it[2]);
+      return open.length?`<li><b>${c}:</b> ${open.join(', ')}</li>`:'';
+    }).join('');
+    const state=todo?`<ul class="nx">${todo}</ul>`:`<p>Every item in this lane is done on your own or for real.</p>`;
+    return `<details class="lane"${ri<3?' open':''}><summary><span>${AN[a]}</span><span class="sc">${Math.round(r.A[a])}</span></summary><p class="vznote">Practice: ${PRACTICE[a]}.</p>${state}</details>`;
+  }).join('');
+  return `<p class="vznote">Items still short of "on my own," grouped by OSA class. Lanes are ordered by your depth. Check that each practice site is still available.</p><div class="tree">${blocks}</div>`;
+}
+function vizHTML(r,open){
+  const tabs=[['Shape',spiderSVG(r.A)],['Histogram',histHTML()],['Grid',gridHTML()],['Skill tree',treeHTML(r,open)],['Next steps',nextHTML(r)]];
+  const inputs=tabs.map((t,i)=>`<input type="radio" name="vz" id="vz${i}"${i===0?' checked':''}>`).join('');
+  const labels=tabs.map((t,i)=>`<label for="vz${i}">${t[0]}</label>`).join('');
+  const panes=tabs.map((t,i)=>`<div class="vzp p${i}">${t[1]}</div>`).join('');
+  return `<div class="vz">${inputs}<div class="vzt">${labels}</div>${panes}</div>`;
+}
 function mapHTML(a,s,b,extra){
   const nocode=(s==='op'||s==='st')?`<div class="mcard wide"><h3>No code needed on this path</h3><p>${SN[s]} work runs on understanding systems and using tools well, like a Web Operator who lives in Burp Suite. You need to understand what code and requests do, but writing programs is optional. Coding widens your options. It does not gate entry.</p></div>`:'';
   return `<div class="map">
@@ -619,7 +696,7 @@ function resultA2(){
     return rTop()+`<div class="res">
       ${tagCard('Not enough evidence yet',`No lane has reached 20 out of 100, so a tag would be a guess. Try more labs, or take Assessment 1 for now.`,false,acts)}
       ${stats([[lanes,'lanes explored'],[counts[3],'done for real'],[counts[1]+counts[2],'tried or solo']])}
-      <div class="sec"><p class="kick">Your depth</p><h2>Depth by lane</h2>${spiderSVG(r.A)}</div>
+      <div class="sec"><p class="kick">Your data</p><h2>Five ways to look at it</h2>${vizHTML(r,[])}</div>
       <div class="sec"><h2>Depth by Style</h2>${bars(r.S,null)}</div>
     </div>`;
   }
@@ -639,9 +716,8 @@ function resultA2(){
   return rTop()+`<div class="res">
     ${tagCard(t.tag,desc,false,acts)}
     ${stats([[lanes,'lanes explored'],[counts[3],'done for real'],[Math.round(r.A[a]),AN[a]+' depth']])}
-    <div class="sec"><p class="kick">Your shape</p><h2>Depth by lane</h2>${spiderSVG(r.A)}</div>
+    <div class="sec"><p class="kick">Your data</p><h2>Five ways to look at it</h2>${vizHTML(r,[a,b].filter(Boolean))}</div>
     <div class="sec"><p class="kick">Your style</p><h2>How you work</h2>${bars(r.S,t.s)}<div class="diag">${d.join('')}</div></div>
-    <div class="sec"><p class="kick">Skill tree</p><h2>What you have unlocked</h2>${treeHTML(r,[a,b].filter(Boolean))}</div>
     <div class="sec"><p class="kick">Level up</p><h2>Learning map</h2>${mapHTML(a,s,b,extra)}</div>
   </div>`;
 }
