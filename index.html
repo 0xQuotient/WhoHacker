@@ -346,7 +346,7 @@ const QS=[
 const Q1=[...QA.map(x=>({...x,t:'a'})),...QS.map(x=>({...x,t:'s'}))];
 let QQ=Q1; /* the questions as asked this run: same set, shuffled order and option positions */
 const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
-const freshQ=()=>[...shuf(Q1.filter(q=>q.t==='a')),...shuf(Q1.filter(q=>q.t==='s'))].map(q=>({...q,o:shuf(q.o)}));
+const freshQ=()=>shuf(Q1).map(q=>({...q,o:shuf(q.o)}));
 
 /* Learning map content */
 const CORE=[
@@ -509,7 +509,7 @@ function footBar(left,right){
 function introView(){
   const a2=S.mode==='a2';
   const rules=a2?[
-    `${ITEMS.length} items, grouped by lane. Say how far you took each one.`,
+    `${ITEMS.length} items, in random order. Say how far you took each one.`,
     `Count only labs, CTFs, bug bounty and work with permission.`,
     `Never done something? Pick Never. That is a normal answer.`,
     `Using tools well is real skill. You do not have to write code to score high.`
@@ -522,14 +522,14 @@ function introView(){
     +footBar('',`<button type="button" class="btn" data-act="begin">Start</button>`);
 }
 function questionView(){
-  const a1=S.mode==='a1',n=total(),cur=S.ans[S.i],last=S.i===n-1;
+  const a1=S.mode==='a1',n=total(),ix=a1?S.i:S.ord[S.i],cur=S.ans[ix],last=S.i===n-1;
   let body;
   if(a1){
     const q=QQ[S.i];
-    body=`<div class="q"><p class="kick">${q.t==='a'?'Where you hack':'How you hack'} · ${S.i+1} of ${n}</p><h2 tabindex="-1" data-focus>${q.q}</h2>
+    body=`<div class="q"><p class="kick">Question ${S.i+1} of ${n}</p><h2 tabindex="-1" data-focus>${q.q}</h2>
       <div class="opts">${q.o.map((o,j)=>`<button type="button" class="opt${cur===j?' on':''}" data-act="pick" data-v="${j}"><span class="txt"><span class="ot">${o[0]}</span></span></button>`).join('')}</div></div>`;
   }else{
-    const it=ITEMS[S.i];
+    const it=ITEMS[ix];
     body=`<div class="q"><p class="kick">Have you… · ${S.i+1} of ${n}</p><h2 tabindex="-1" data-focus>${it[3]}</h2>
       <div class="opts">${LADDER.map((l,j)=>`<button type="button" class="opt${cur===j?' on':''}" data-act="pick" data-v="${j}"><span class="lv">${j}</span><span class="txt"><span class="ot">${l[0]}</span><span class="od">${l[1]}</span></span></button>`).join('')}</div></div>`;
   }
@@ -757,9 +757,9 @@ app.addEventListener('click',e=>{
   else if(act==='backres'){go('result')}
   else if(act==='viewresults'){S.mode=S.saved.mode;S.ans=S.saved.ans.slice();go('result')}
   else if(act==='scrollkey'){const k=document.getElementById('key');if(k)try{k.scrollIntoView({behavior:'smooth'})}catch(x){k.scrollIntoView()}}
-  else if(act==='begin'){S.i=0;S.ans=[];if(S.mode==='a1')QQ=freshQ();go('q')}
-  else if(act==='pick'){S.ans[S.i]=Number(b.dataset.v);render(false);const c=document.getElementById('cont');if(c)try{c.focus({preventScroll:true})}catch(x){}}
-  else if(act==='next'){if(S.ans[S.i]!=null)advance()}
+  else if(act==='begin'){S.i=0;S.ans=[];if(S.mode==='a1')QQ=freshQ();else S.ord=shuf(ITEMS.map((_,i)=>i));go('q')}
+  else if(act==='pick'){S.ans[S.mode==='a1'?S.i:S.ord[S.i]]=Number(b.dataset.v);render(false);const c=document.getElementById('cont');if(c)try{c.focus({preventScroll:true})}catch(x){}}
+  else if(act==='next'){if(S.ans[S.mode==='a1'?S.i:S.ord[S.i]]!=null)advance()}
   else if(act==='back'){if(S.i>0){S.i--;render()}}
   else if(act==='copy')copyTag(b);
 });

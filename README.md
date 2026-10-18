@@ -11,8 +11,8 @@ Notation: `Network × Cloud` means evenly split, `Web (IoT)` means mostly Web wi
 
 ## The two assessments
 
-1. **Assessment 1** (beginners): 18 interest questions, shuffled each run. Measures interest, not skill.
-2. **Assessment 2** (experienced): 45 items, 5 per Archetype, each tied to a class from the OSA. Measures what you have actually done (never / tried / on my own / for real).
+1. **Assessment 1** (beginners): 18 interest questions, asked in a fresh random order each run, with answer positions shuffled too. Measures interest, not skill.
+2. **Assessment 2** (experienced): 45 items, 5 per Archetype, each tied to a class from the OSA, asked in random order each run. Measures what you have actually done (never / tried / on my own / for real).
 
 ## Run it
 
