@@ -511,7 +511,7 @@ function introView(){
   const rules=a2?[
     `${ITEMS.length} items, grouped by lane. Say how far you took each one.`,
     `Count only labs, CTFs, bug bounty and work with permission.`,
-    `Never touched a lane? Tap skip and move on.`,
+    `Never done something? Pick Never. That is a normal answer.`,
     `Using tools well is real skill. You do not have to write code to score high.`
   ]:[
     `${Q1.length} quick questions. Tap what sounds most fun.`,
@@ -534,7 +534,7 @@ function questionView(){
     body=`<div class="q"><span class="lane-tag">${AN[it[0]]} · ${idxs.indexOf(S.i)+1} of ${idxs.length}</span><p class="kick">Have you…</p><h2 tabindex="-1" data-focus>${it[3]}</h2>
       <div class="opts">${LADDER.map((l,j)=>`<button type="button" class="opt${cur===j?' on':''}" data-act="pick" data-v="${j}"><span class="lv">${j}</span><span class="txt"><span class="ot">${l[0]}</span><span class="od">${l[1]}</span></span></button>`).join('')}</div></div>`;
   }
-  const left=`<button type="button" class="link" data-act="back"${S.i===0?' disabled':''}>Back</button>`+(a1?'':`<button type="button" class="link" data-act="skip">Skip ${AN[ITEMS[S.i][0]]}</button>`);
+  const left=`<button type="button" class="link" data-act="back"${S.i===0?' disabled':''}>Back</button>`;
   const right=`<button type="button" class="btn" id="cont" data-act="next"${cur==null?' disabled':''}>${last?'See my tag':'Continue'}</button>`;
   return qTop(S.i/n*100)+body+footBar(left,right);
 }
@@ -762,12 +762,6 @@ app.addEventListener('click',e=>{
   else if(act==='pick'){S.ans[S.i]=Number(b.dataset.v);render(false);const c=document.getElementById('cont');if(c)try{c.focus({preventScroll:true})}catch(x){}}
   else if(act==='next'){if(S.ans[S.i]!=null)advance()}
   else if(act==='back'){if(S.i>0){S.i--;render()}}
-  else if(act==='skip'){
-    const a=ITEMS[S.i][0];
-    ITEMS.forEach((it,i)=>{if(it[0]===a&&i>=S.i)S.ans[i]=0});
-    let nxt=S.i;while(nxt<ITEMS.length&&ITEMS[nxt][0]===a)nxt++;
-    if(nxt>=ITEMS.length)go('result');else{S.i=nxt;render();try{window.scrollTo(0,0)}catch(x){}}
-  }
   else if(act==='copy')copyTag(b);
 });
 render();
