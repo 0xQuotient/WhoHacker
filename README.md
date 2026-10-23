@@ -2,9 +2,9 @@
 
 "Hacker" is a bloated term. It covers everyone from someone running Burp Suite against a web app to someone writing kernel exploits, and explaining your actual specialization usually takes a long conversation.
 
-WhoHacker is the middle ground: a **tag**, a quick surface-level summary of your specialization that says where you attack and how.
+WhoHacker is the middle ground: a **tag**, a quick surface-level summary of your specialization that says where you attack and how. Some example tags are:
 
-> **Web Operator** · **Network × Cloud Toolsmith** · **Binary Exploit Developer**
+> **Web Operator** · **Network × Cloud Toolsmith** · **Binary (Exploit) Developer**
 
 ## The tag
 
