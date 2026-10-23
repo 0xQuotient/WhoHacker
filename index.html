@@ -1,4 +1,5 @@
 <title>WhoHacker</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%22-6 -4 112 114%22%3E%3Crect x=%22-6%22 y=%22-4%22 width=%22112%22 height=%22114%22 rx=%2224%22 fill=%22%230D0A12%22/%3E%3Cdefs%3E%3Cfilter id=%22gf%22 x=%22-40%25%22 y=%22-40%25%22 width=%22180%25%22 height=%22180%25%22%3E%3CfeGaussianBlur stdDeviation=%221.8%22 result=%22b%22/%3E%3CfeMerge%3E%3CfeMergeNode in=%22b%22/%3E%3CfeMergeNode in=%22SourceGraphic%22/%3E%3C/feMerge%3E%3C/filter%3E%3C/defs%3E%3Cpath d=%22M14 98V50C14 26 30 10 50 10s36 16 36 40v48l-12-9-12 9-12-9-12 9-12-9z%22 fill=%22%237A33F0%22 stroke=%22%234A1A99%22 stroke-width=%224%22 stroke-linejoin=%22round%22/%3E%3Cpath d=%22M16 28h68v24c-10 6-24 8-34 8s-24-2-34-8z%22 fill=%22%230D0A12%22 opacity=%22.6%22/%3E%3Cpath d=%22M25 41l20 7-2 7-17-5z%22 fill=%22%2339FF14%22 filter=%22url(%23gf)%22/%3E%3Cpath d=%22M75 41l-20 7 2 7 17-5z%22 fill=%22%2339FF14%22 filter=%22url(%23gf)%22/%3E%3Cpath d=%22M30 68l7 7 6-6 7 8 7-8 6 6 7-7%22 fill=%22none%22 stroke=%22%2339FF14%22 stroke-width=%223.2%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22 filter=%22url(%23gf)%22/%3E%3Cpath d=%22M32 26C31 10 36 1 50 1s19 9 18 25z%22 fill=%22%230A0710%22 stroke=%22%238B3DFF%22 stroke-width=%222.5%22 stroke-linejoin=%22round%22/%3E%3Crect x=%2232%22 y=%2215%22 width=%2236%22 height=%226%22 fill=%22%2339FF14%22/%3E%3Cellipse cx=%2250%22 cy=%2226%22 rx=%2241%22 ry=%227.5%22 fill=%22%230A0710%22 stroke=%22%238B3DFF%22 stroke-width=%222.5%22/%3E%3C/svg%3E">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -99,6 +100,41 @@ button{font:inherit;color:inherit;cursor:pointer}
 .lane li>.pips{grid-column:1/-1;grid-row:2}
 .lane ul.nx li{display:block;border-top:2px solid var(--line);padding:8px 0 0;margin-top:8px;font-size:.9rem;font-weight:600;color:var(--muted)}
 .lane p.vznote{padding:0 2px}
+
+/* Motion. Everything here is skipped for people who ask their device for reduced motion. */
+@media (prefers-reduced-motion:no-preference){
+  #app.enter>:not(.foot):not(.qtop):not(.res){animation:vin .4s cubic-bezier(.2,.8,.2,1) both}
+  @keyframes vin{from{opacity:0;transform:translateX(calc(var(--d,1)*26px))}}
+  #app.enter .res>*{animation:rise .55s cubic-bezier(.2,.8,.2,1) both}
+  #app.enter .res>*:nth-child(1){animation-delay:0s}#app.enter .res>*:nth-child(2){animation-delay:.08s}#app.enter .res>*:nth-child(3){animation-delay:.16s}#app.enter .res>*:nth-child(4){animation-delay:.24s}#app.enter .res>*:nth-child(5){animation-delay:.32s}#app.enter .res>*:nth-child(n+6){animation-delay:.4s}
+  @keyframes rise{from{opacity:0;transform:translateY(18px)}}
+  #app.enter .tagcard{animation:tagpop .7s cubic-bezier(.34,1.56,.64,1) both}
+  @keyframes tagpop{from{opacity:0;transform:scale(.88) translateY(10px)}}
+  .opt{transition:background .15s,border-color .15s,transform .12s}
+  .opt:active{transform:scale(.985)}
+  .opt.on{animation:optpop .3s cubic-bezier(.34,1.56,.64,1)}
+  @keyframes optpop{0%{transform:scale(.97)}60%{transform:scale(1.025)}100%{transform:scale(1)}}
+  #cont:not([disabled]){animation:ready .45s cubic-bezier(.34,1.56,.64,1)}
+  @keyframes ready{from{transform:scale(.94)}}
+  .btn{transition:transform .12s,box-shadow .12s,filter .15s}
+  .btn:hover:not([disabled]){filter:brightness(1.08);transform:translateY(-2px)}
+  .btn:active:not([disabled]){transform:translateY(5px)}
+  .sb .track i{animation:grow .9s cubic-bezier(.2,.8,.2,1) .25s both}
+  .hl .stack i{animation:grow .9s cubic-bezier(.2,.8,.2,1) .25s both}
+  @keyframes grow{from{width:0}}
+  .spider .area{transform-origin:center;transform-box:fill-box;animation:radar 1s cubic-bezier(.2,.8,.2,1) .15s both}
+  @keyframes radar{from{opacity:0;transform:scale(.3)}}
+  .spider .dot{animation:fadein .5s ease .8s both}
+  @keyframes fadein{from{opacity:0}}
+  .vzp{animation:fadein .35s ease both}
+  .vzt label{transition:background .2s,border-color .2s,color .2s}
+  .lane[open]>summary~*{animation:fadein .3s ease both}
+  .mascot{animation:float 3.2s ease-in-out infinite}
+  @keyframes float{50%{transform:translateY(-6px)}}
+  .confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:50}
+  .confetti i{position:absolute;top:-12px;width:9px;height:14px;border-radius:2px;animation:fall var(--t) cubic-bezier(.3,.6,.4,1) forwards}
+  @keyframes fall{to{transform:translate(var(--x),105vh) rotate(var(--r));opacity:.9}}
+}
 .pfact{color:var(--fg)!important;font-weight:800!important;margin-bottom:6px}
 .sbars.mini{margin-top:10px;gap:8px}
 .fine{margin-top:34px;color:var(--muted);font-size:.8rem;font-weight:600;text-align:center}
@@ -483,7 +519,7 @@ function tagA1(r,ans){
 const app=document.getElementById('app');
 let S={view:'home',mode:null,i:0,ans:[]};
 
-const MASCOT=`<svg class="mascot" viewBox="0 0 100 110" aria-hidden="true"><path d="M14 98V50C14 26 30 10 50 10s36 16 36 40v48l-12-9-12 9-12-9-12 9-12-9z" fill="#8B3DFF" stroke="#5A1CB5" stroke-width="4" stroke-linejoin="round"/><circle cx="37" cy="48" r="10" fill="#fff"/><circle cx="63" cy="48" r="10" fill="#fff"/><circle cx="40" cy="50" r="5" fill="#0D0A12"/><circle cx="66" cy="50" r="5" fill="#0D0A12"/><rect x="35" y="69" width="20" height="5" rx="2.5" fill="#39FF14"/><rect x="59" y="66" width="4" height="11" rx="1" fill="#39FF14"/></svg>`;
+const MASCOT=`<svg class="mascot" viewBox="0 0 100 110" aria-hidden="true"><defs><filter id="gl" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="1.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path d="M14 98V50C14 26 30 10 50 10s36 16 36 40v48l-12-9-12 9-12-9-12 9-12-9z" fill="#7A33F0" stroke="#4A1A99" stroke-width="4" stroke-linejoin="round"/><path d="M16 28h68v24c-10 6-24 8-34 8s-24-2-34-8z" fill="#0D0A12" opacity=".6"/><path d="M25 41l20 7-2 7-17-5z" fill="#39FF14" filter="url(#gl)"/><path d="M75 41l-20 7 2 7 17-5z" fill="#39FF14" filter="url(#gl)"/><path d="M30 68l7 7 6-6 7 8 7-8 6 6 7-7" fill="none" stroke="#39FF14" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" filter="url(#gl)"/><path d="M32 26C31 10 36 1 50 1s19 9 18 25z" fill="#0A0710" stroke="#8B3DFF" stroke-width="2.5" stroke-linejoin="round"/><rect x="32" y="15" width="36" height="6" fill="#39FF14"/><ellipse cx="50" cy="26" rx="41" ry="7.5" fill="#0A0710" stroke="#8B3DFF" stroke-width="2.5"/></svg>`;
 const WM=`<span class="wm"><b>Who</b><span>Hacker</span></span>`;
 
 /* ---------- views ---------- */
@@ -791,6 +827,27 @@ function resultA2(){
 }
 
 /* ---------- render and events ---------- */
+const reduced=()=>{try{return window.matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){return false}};
+let DIR=1,PP=0;
+function burst(){
+  if(reduced())return;
+  const c=document.createElement('div');c.className='confetti';c.setAttribute('aria-hidden','true');
+  const cols=['#FF7A1A','#8B3DFF','#39FF14','#FFFFFF'];
+  for(let i=0;i<46;i++){const p=document.createElement('i');
+    p.style.left=(Math.random()*100)+'%';p.style.background=cols[i%4];
+    p.style.setProperty('--x',((Math.random()-.5)*160)+'px');p.style.setProperty('--r',((Math.random()-.5)*900)+'deg');
+    p.style.setProperty('--t',(1.3+Math.random()*1.1)+'s');p.style.animationDelay=(Math.random()*.25)+'s';c.appendChild(p)}
+  document.body.appendChild(c);setTimeout(()=>c.remove(),2800);
+}
+function countUp(){
+  if(reduced())return;
+  app.querySelectorAll('.stat b').forEach(b=>{
+    const end=parseInt(b.textContent,10);if(isNaN(end)||end<=0||String(end)!==b.textContent.trim())return;
+    const t0=performance.now(),d=700;
+    const tick=t=>{const k=Math.min(1,(t-t0)/d),e=1-Math.pow(1-k,3);b.textContent=Math.round(end*e);if(k<1)requestAnimationFrame(tick)};
+    b.textContent='0';requestAnimationFrame(tick);
+  });
+}
 function render(focus){
   let h='';
   if(S.view==='home')h=homeView();
@@ -799,13 +856,18 @@ function render(focus){
   else if(S.view==='q')h=questionView();
   else h=S.mode==='a1'?resultA1():resultA2();
   app.innerHTML=h;
+  app.classList.remove('enter');
+  if(focus!==false&&!reduced()){app.style.setProperty('--d',DIR);void app.offsetWidth;app.classList.add('enter')}
+  const pb=app.querySelector('.pbar i');
+  if(pb){const to=parseFloat(pb.style.width)||0;if(focus!==false&&!reduced()&&pb.animate&&PP!==to)try{pb.animate([{width:PP+'%'},{width:to+'%'}],{duration:450,easing:'cubic-bezier(.2,.8,.2,1)'})}catch(e){}PP=to}
+  if(S.view==='result'&&focus!==false){countUp();if(S.fresh){S.fresh=false;burst()}}
   document.body.classList.toggle('has-foot',S.view==='intro'||S.view==='q');
   if(focus!==false&&S.view!=='home'){const f=app.querySelector('[data-focus]');if(f)try{f.focus({preventScroll:true})}catch(e){}}
 }
 function go(view){S.view=view;if(view==='result')S.saved={mode:S.mode,ans:S.ans.slice()};render();try{window.scrollTo(0,0)}catch(e){}}
 function total(){return S.mode==='a1'?QQ.length:ITEMS.length}
 function advance(){
-  if(S.i<total()-1){S.i++;render();try{window.scrollTo(0,0)}catch(e){}}else go('result');
+  DIR=1;if(S.i<total()-1){S.i++;render();try{window.scrollTo(0,0)}catch(e){}}else{S.fresh=true;go('result')}
 }
 function copyTag(btn){
   const el=document.getElementById('tagtext');if(!el)return;
@@ -827,9 +889,9 @@ app.addEventListener('click',e=>{
   else if(act==='viewresults'){S.mode=S.saved.mode;S.ans=S.saved.ans.slice();go('result')}
   else if(act==='scrollkey'){const k=document.getElementById('key');if(k)try{k.scrollIntoView({behavior:'smooth'})}catch(x){k.scrollIntoView()}}
   else if(act==='begin'){S.i=0;S.ans=[];if(S.mode==='a1')QQ=freshQ();else S.ord=shuf(ITEMS.map((_,i)=>i));go('q')}
-  else if(act==='pick'){S.ans[S.mode==='a1'?S.i:S.ord[S.i]]=Number(b.dataset.v);render(false);const c=document.getElementById('cont');if(c)try{c.focus({preventScroll:true})}catch(x){}}
+  else if(act==='pick'){try{navigator.vibrate&&navigator.vibrate(8)}catch(x){}S.ans[S.mode==='a1'?S.i:S.ord[S.i]]=Number(b.dataset.v);render(false);const c=document.getElementById('cont');if(c)try{c.focus({preventScroll:true})}catch(x){}}
   else if(act==='next'){if(S.ans[S.mode==='a1'?S.i:S.ord[S.i]]!=null)advance()}
-  else if(act==='back'){if(S.i>0){S.i--;render()}}
+  else if(act==='back'){if(S.i>0){DIR=-1;S.i--;render();DIR=1}}
   else if(act==='copy')copyTag(b);
 });
 render();
