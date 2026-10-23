@@ -99,6 +99,8 @@ button{font:inherit;color:inherit;cursor:pointer}
 .lane li>.pips{grid-column:1/-1;grid-row:2}
 .lane ul.nx li{display:block;border-top:2px solid var(--line);padding:8px 0 0;margin-top:8px;font-size:.9rem;font-weight:600;color:var(--muted)}
 .lane p.vznote{padding:0 2px}
+.pfact{color:var(--fg)!important;font-weight:800!important;margin-bottom:6px}
+.sbars.mini{margin-top:10px;gap:8px}
 .fine{margin-top:34px;color:var(--muted);font-size:.8rem;font-weight:600;text-align:center}
 
 .qtop{display:flex;align-items:center;gap:14px;margin-top:4px}
@@ -614,6 +616,71 @@ function vizHTML(r,open){
   const panes=tabs.map((t,i)=>`<div class="vzp p${i}">${t[1]}</div>`).join('');
   return `<div class="vz">${inputs}<div class="vzt">${labels}</div>${panes}</div>`;
 }
+function patternsHTML(r,t){
+  const lv=i=>S.ans[i]||0;
+  const lane={};
+  AK.forEach(a=>{const idx=ITEMS.map((_,i)=>i).filter(i=>ITEMS[i][0]===a);lane[a]={idx,pts:idx.reduce((x,i)=>x+lv(i),0),max:Math.max(...idx.map(lv))}});
+  const total=AK.reduce((x,a)=>x+lane[a].pts,0);
+  const ranked=rankKeys(r.A,AK), topL=ranked[0];
+  const active=AK.filter(a=>lane[a].pts>0), solid=AK.filter(a=>lane[a].pts>=6);
+  const names=l=>l.map(a=>AN[a]).join(', ');
+  const cards=[];
+  /* 1. Breadth and depth */
+  const share=total?Math.round(lane[topL].pts/total*100):0;
+  let shape;
+  if(!total)shape='No answers above Never yet.';
+  else if(!solid.length)shape='Exploring: touched '+active.length+' lane'+(active.length>1?'s':'')+', none past the 40-point mark yet.';
+  else if(solid.length===1)shape=active.length>=3?'T-shaped: one lane past 40 points, with exposure in '+(active.length-1)+' others.':'Focused: one lane past 40 points, little outside it so far.';
+  else if(solid.length===2)shape='Two-lane: '+names(solid)+' are both past 40 points.';
+  else shape='Broad: '+solid.length+' lanes past 40 points ('+names(solid)+').';
+  cards.push(['Breadth and depth',shape,`${active.length} of 9 lanes touched. ${AN[topL]} holds ${share}% of all your points. A lane counts as solid at 40 points or more out of 100. This is the OSA's T-shaped model, measured from your answers.`]);
+  /* 2. Practice versus real work */
+  const c=[0,0,0,0];ITEMS.forEach((_,i)=>c[lv(i)]++);
+  const done=c[1]+c[2]+c[3];
+  const pc=v=>done?Math.round(v/done*100):0;
+  const realL=AK.filter(a=>lane[a].max===3), guidedL=AK.filter(a=>lane[a].pts>0&&lane[a].max===1);
+  cards.push(['Practice versus real work',done?`Of the ${done} items you have touched, ${pc(c[1])}% were guided, ${pc(c[2])}% on your own, ${pc(c[3])}% for real.`:'Nothing above Never yet.',
+    `${realL.length?'Real-world work in: '+names(realL)+'. ':'No lane has a for-real answer yet. '}${guidedL.length?'Guided only in: '+names(guidedL)+'.':'Every touched lane has at least one item done on your own or for real.'} A lane counts as guided-only when its highest answer is Tried.`]);
+  /* 3. Styles across lanes */
+  const sl=SK.map(y=>[y,AK.filter(a=>ITEMS.some((it,i)=>it[0]===a&&it[1]===y&&lv(i)>=2)).length]).sort((x,y)=>y[1]-x[1]||SK.indexOf(x[0])-SK.indexOf(y[0]));
+  const bars3=sl.map(([y,n])=>`<div class="sb"><span>${SN[y]}</span><span class="track"><i style="width:${n/9*100}%"></i></span><span class="v">${n}</span></div>`).join('');
+  const wide=sl[0][1]>0?`${SN[sl[0][0]]} work shows up on its own in the most lanes (${sl[0][1]} of 9).`:'No Style has an on-your-own answer in any lane yet.';
+  const one=sl.filter(x=>x[1]===1).map(x=>SN[x[0]]);
+  cards.push(['Styles across lanes',wide,`Lanes where you reported at least "on my own" for an item of that Style.${one.length?' Only one lane so far: '+one.join(', ')+'.':''} A Style that appears in many lanes travels with you. One tied to a single lane has not been tested elsewhere yet.<div class="sbars mini">${bars3}</div>`]);
+  /* 4. Skipped steps */
+  const gaps=[];
+  AK.forEach(a=>{
+    const idx=lane[a].idx;
+    const hard=idx.filter(i=>['exp','tool','res','re'].includes(ITEMS[i][1])&&lv(i)>=2);
+    const base=idx.filter(i=>['op','st'].includes(ITEMS[i][1]));
+    if(hard.length&&base.length&&base.every(i=>lv(i)===0))gaps.push(`${AN[a]} (${SN[ITEMS[hard[0]][1]]} work, but no Operator or Strategist item)`);
+  });
+  cards.push(['Order you learned in',gaps.length?`${gaps.length} lane${gaps.length>1?'s':''} where you went past the usual starting steps.`:'No lane skips the usual starting steps.',
+    gaps.length?`${gaps.join('; ')}. That is a legitimate path. It only means the common first steps, using existing tools and mapping the target, are not counted for those lanes.`:`No lane has building, exploiting or research at on-your-own level while all its Operator and Strategist items sit at Never.`]);
+  /* 5. Class coverage */
+  const cov=ranked.filter(a=>lane[a].pts>0).map(a=>{
+    const hit=CLASSES[a].filter(cl=>ITEMS.some((it,i)=>it[0]===a&&it[4]===cl&&lv(i)>=1));
+    const deep=CLASSES[a].map(cl=>[cl,ITEMS.reduce((x,it,i)=>x+(it[0]===a&&it[4]===cl?lv(i):0),0)]).sort((x,y)=>y[1]-x[1])[0][0];
+    return `${AN[a]}: ${hit.length} of ${CLASSES[a].length} classes, deepest in ${deep}`;
+  });
+  cards.push(['Coverage inside lanes',cov.length?`${cov.length} lane${cov.length>1?'s':''} touched, by OSA class.`:'No lane touched yet.',cov.length?cov.join('. ')+'.':'']);
+  /* 6 and 7 need a tag */
+  if(!t.none){
+    const a=t.a,s=t.s;
+    const second=ranked.find(x=>x!==a);
+    const lead=Math.round(r.A[a]-r.A[second]);
+    const sRank=rankKeys(r.S,SK),s2=sRank.find(x=>x!==s);
+    const sCnt=y=>ITEMS.filter(it=>it[1]===y).length;
+    const sLead=Math.round(r.S[s]-r.S[s2]),sSwing=Math.max(100/sCnt(s),100/sCnt(s2));
+    const lClose=lead<20,sClose=sLead<sSwing;
+    cards.push(['How firm the tag is',`${AN[a]} leads ${AN[second]} by ${lead} points. ${SN[s]} leads ${SN[s2]} by ${sLead}.`,
+      `${lClose?'One answer could change your lane.':'No single answer could change your lane.'} ${sClose?'One answer could change your Style.':'No single answer could change your Style.'} A single answer moves a lane score by up to 20 points, and a Style score by ${Math.round(Math.min(100/sCnt(s),100/sCnt(s2)))===Math.round(sSwing)?Math.round(sSwing):Math.round(Math.min(100/sCnt(s),100/sCnt(s2)))+' to '+Math.round(sSwing)}.`]);
+    const nextL=AK.filter(x=>lane[x].pts===0&&pairV(x,s)==='Y');
+    cards.push(['Where your Style has room',nextL.length?`${SN[s]} is a common pairing in ${nextL.length} lane${nextL.length>1?'s':''} you have not touched.`:`You have touched every lane where ${SN[s]} is a common pairing.`,
+      nextL.length?`${names(nextL)}. This uses the pairing table in the Key, not a prediction about what you would enjoy.`:`Untouched lanes remaining pair with ${SN[s]} only rarely or not at all.`]);
+  }
+  return `<div class="map">${cards.map(([h,f,d])=>`<div class="mcard"><h3>${h}</h3><p class="pfact">${f}</p><p>${d}</p></div>`).join('')}</div>`;
+}
 function mapHTML(a,s,b,extra){
   const nocode=(s==='op'||s==='st')?`<div class="mcard wide"><h3>No code needed on this path</h3><p>${SN[s]} work runs on understanding systems and using tools well, like a Web Operator who lives in Burp Suite. You need to understand what code and requests do, but writing programs is optional. Coding widens your options. It does not gate entry.</p></div>`:'';
   return `<div class="map">
@@ -697,6 +764,7 @@ function resultA2(){
       ${stats([[lanes,'lanes explored'],[counts[3],'done for real'],[counts[1]+counts[2],'tried or solo']])}
       <div class="sec"><p class="kick">Your data</p><h2>Five ways to look at it</h2>${vizHTML(r,[])}</div>
       <div class="sec"><h2>Depth by Style</h2>${bars(r.S,null)}</div>
+      <div class="sec"><p class="kick">Patterns</p><h2>What your answers show</h2><p class="vznote">Each card is computed from your answers and says how. They describe what you reported. They do not judge it.</p>${patternsHTML(r,t)}</div>
     </div>`;
   }
   const {a,s,b,mode}=t;
@@ -717,6 +785,7 @@ function resultA2(){
     ${stats([[lanes,'lanes explored'],[counts[3],'done for real'],[Math.round(r.A[a]),AN[a]+' depth']])}
     <div class="sec"><p class="kick">Your data</p><h2>Five ways to look at it</h2>${vizHTML(r,[a,b].filter(Boolean))}</div>
     <div class="sec"><p class="kick">Your style</p><h2>How you work</h2>${bars(r.S,t.s)}<div class="diag">${d.join('')}</div></div>
+    <div class="sec"><p class="kick">Patterns</p><h2>What your answers show</h2><p class="vznote">Each card is computed from your answers and says how. They describe what you reported. They do not judge it.</p>${patternsHTML(r,t)}</div>
     <div class="sec"><p class="kick">Level up</p><h2>Learning map</h2>${mapHTML(a,s,b,extra)}</div>
   </div>`;
 }
