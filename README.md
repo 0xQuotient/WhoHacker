@@ -25,7 +25,7 @@ Notation:
 
 ## Two assessments
 
-- **Assessment 1** is for beginners. It is 18 interest questions and measures what pulls you, not what you can do.
+- **Assessment 1** is for beginners. It is 18 questions. Some ask what draws you, and the Style questions give you a situation and ask what you would do first, so your choice shows how you work instead of asking you to describe yourself. It measures pull, not skill.
 - **Assessment 2** is for people with experience. It is 45 items, 5 per Archetype, each tied to a class from the OSA. You say how far you took each one: never, tried it, did it on my own, or done it for real. Nothing is self-rated for confidence, only what you have actually touched.
 
 Both ask their questions in a fresh random order each run. Assessment 2's results can be viewed as a spider chart, histogram, Archetype by Style grid, skill tree, or a list of next steps by class. These are counts of your own answers, not interpretation.
