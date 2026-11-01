@@ -4,7 +4,7 @@
 
 WhoHacker is the middle ground: a **tag**, a quick surface-level summary of your specialization that says where you attack and how. Some example tags are:
 
-> **Web Operator** · **Network × Cloud Toolsmith** · **Binary (Exploit) Developer**
+> **Web Operator** · **Network × Cloud Toolsmith** · **Binary (IoT) Developer**
 
 ## The tag
 
