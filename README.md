@@ -54,3 +54,7 @@ Built on two posts I wrote:
 ## Status
 
 Early version. Still to do: test it with real people to tune the cutoffs for hybrid and secondary tags, and check that Operator and Strategist can be told apart.
+
+## Security
+
+The page loads nothing from other sites and stores nothing in the browser (no cookies, localStorage, or service workers). Fonts (Nunito) are self-hosted in `fonts/` under the SIL OFL. A Content-Security-Policy meta tag blocks all network requests except the site's own files and allows only the one inline script, pinned by hash. If you edit the script, update the `sha256` in the CSP meta tag or the page won't run. Outbound links use `noopener noreferrer`, and the page blanks itself if loaded inside a frame.

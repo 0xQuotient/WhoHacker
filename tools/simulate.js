@@ -3,7 +3,7 @@
 const vm = require('vm'), fs = require('fs'), path = require('path');
 const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
 const js = html.match(/<script>([\s\S]*)<\/script>/)[1];
-const el = { addEventListener() {}, innerHTML: '', querySelector() { return null; } };
+const el = { addEventListener() {}, innerHTML: '', querySelector() { return null; }, classList: { add() {}, remove() {}, toggle() {} }, style: { setProperty() {} }, offsetWidth: 0 };
 const ctx = { document: { getElementById: () => el, body: { classList: { toggle() {} } } }, window: {}, navigator: {}, console, Math };
 vm.createContext(ctx);
 vm.runInContext(js + ';this.X={Q1,ITEMS,scoreA1,tagA1,scoreA2,tagA2}', ctx);

@@ -1,10 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-J8Bax+ZEkQlCTgrIqL61f1xarHL8ZfwUPWBoCqIVfDg='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>WhoHacker</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%22-6 -4 112 114%22%3E%3Crect x=%22-6%22 y=%22-4%22 width=%22112%22 height=%22114%22 rx=%2224%22 fill=%22%230D0A12%22/%3E%3Cdefs%3E%3Cfilter id=%22gf%22 x=%22-40%25%22 y=%22-40%25%22 width=%22180%25%22 height=%22180%25%22%3E%3CfeGaussianBlur stdDeviation=%221.8%22 result=%22b%22/%3E%3CfeMerge%3E%3CfeMergeNode in=%22b%22/%3E%3CfeMergeNode in=%22SourceGraphic%22/%3E%3C/feMerge%3E%3C/filter%3E%3C/defs%3E%3Cpath d=%22M14 98V50C14 26 30 10 50 10s36 16 36 40v48l-12-9-12 9-12-9-12 9-12-9z%22 fill=%22%237A33F0%22 stroke=%22%234A1A99%22 stroke-width=%224%22 stroke-linejoin=%22round%22/%3E%3Cpath d=%22M16 28h68v24c-10 6-24 8-34 8s-24-2-34-8z%22 fill=%22%230D0A12%22 opacity=%22.6%22/%3E%3Cpath d=%22M25 41l20 7-2 7-17-5z%22 fill=%22%2339FF14%22 filter=%22url(%23gf)%22/%3E%3Cpath d=%22M75 41l-20 7 2 7 17-5z%22 fill=%22%2339FF14%22 filter=%22url(%23gf)%22/%3E%3Cpath d=%22M30 68l7 7 6-6 7 8 7-8 6 6 7-7%22 fill=%22none%22 stroke=%22%2339FF14%22 stroke-width=%223.2%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22 filter=%22url(%23gf)%22/%3E%3Cpath d=%22M32 26C31 10 36 1 50 1s19 9 18 25z%22 fill=%22%230A0710%22 stroke=%22%238B3DFF%22 stroke-width=%222.5%22 stroke-linejoin=%22round%22/%3E%3Crect x=%2232%22 y=%2215%22 width=%2236%22 height=%226%22 fill=%22%2339FF14%22/%3E%3Cellipse cx=%2250%22 cy=%2226%22 rx=%2241%22 ry=%227.5%22 fill=%22%230A0710%22 stroke=%22%238B3DFF%22 stroke-width=%222.5%22/%3E%3C/svg%3E">
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap">
 <style>
+@font-face { font-family: "Nunito"; font-style: normal; font-weight: 600; font-display: swap; src: url("fonts/nunito-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "Nunito"; font-style: normal; font-weight: 700; font-display: swap; src: url("fonts/nunito-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "Nunito"; font-style: normal; font-weight: 800; font-display: swap; src: url("fonts/nunito-latin-800-normal.woff2") format("woff2"); }
+@font-face { font-family: "Nunito"; font-style: normal; font-weight: 900; font-display: swap; src: url("fonts/nunito-latin-900-normal.woff2") format("woff2"); }
 /* Layout concept: an app, not an article. One chunky action per screen, a bottom bar for Continue, Halloween palette on black. */
 :root{
   --bg:#0D0A12; --surface:#1A1424; --surface2:#261B38; --line:#3A2C52;
@@ -265,6 +273,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 <div class="shell" id="app"></div>
 
 <script>
+if (window.top !== window.self) { document.documentElement.textContent = ""; throw new Error("framing blocked"); }
 const AN={web:'Web',net:'Network',cloud:'Cloud',mob:'Mobile',cry:'Cryptocurrency',hum:'Human',iot:'IoT',bin:'Binary',ai:'AI'};
 const SN={op:'Operator',tool:'Toolsmith',exp:'Exploit Developer',res:'Researcher',re:'Reverse Engineer',st:'Strategist'};
 const AK=Object.keys(AN), SK=Object.keys(SN);
@@ -762,8 +771,8 @@ function decodeHTML(a,s,b,mode,r,h){
     <h3>Archetypes: where you hack</h3><ul class="dl">${aList}</ul>
     <h3>Styles: how you hack</h3><ul class="dl">${sList}</ul>
   </details>
-  <div class="card src"><h3>Original posts</h3><ul class="posts"><li><a href="https://paragraph.com/@derrickjr/osa" target="_blank" rel="noopener">Offensive Security Archetypes</a></li><li><a href="https://paragraph.com/@derrickjr/technical-hacking-is-social" target="_blank" rel="noopener">Technical Hacking is Social</a></li></ul></div>
-  <div class="card src"><h3>The full document</h3><p class="fine">How the scoring, pairings and both assessments work.</p><a class="btn-link" href="https://claude.ai/code/artifact/5a869950-ffad-46ac-89c7-e53db83adcc9" target="_blank" rel="noopener">Read the spec ↗</a></div></div>`;
+  <div class="card src"><h3>Original posts</h3><ul class="posts"><li><a href="https://paragraph.com/@derrickjr/osa" target="_blank" rel="noopener noreferrer">Offensive Security Archetypes</a></li><li><a href="https://paragraph.com/@derrickjr/technical-hacking-is-social" target="_blank" rel="noopener noreferrer">Technical Hacking is Social</a></li></ul></div>
+  <div class="card src"><h3>The full document</h3><p class="fine">How the scoring, pairings and both assessments work.</p><a class="btn-link" href="https://claude.ai/code/artifact/5a869950-ffad-46ac-89c7-e53db83adcc9" target="_blank" rel="noopener noreferrer">Read the spec ↗</a></div></div>`;
 }
 function keySection(){
   return decodeHTML('web','op',null,'pure',null,{id:'key',kick:'Key',title:'How to read a tag',pre:'<div class="tagdemo">Web Operator</div>'});
