@@ -1,5 +1,7 @@
 # WhoHacker
 
+**Live:** https://0xquotient.github.io/whohacker
+
 "Hacker" is a bloated term. It covers everyone from someone running Burp Suite against a web app to someone writing kernel exploits, and explaining your actual specialization usually takes a long conversation.
 
 WhoHacker is the middle ground: a **tag**, a quick surface-level summary of your specialization that says where you attack and how. Some example tags are:
