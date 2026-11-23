@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-AnZ+mLp5IQuqA1tloMRJiQWCwQJemlPr2jRCN0sJc4c='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-jsONwdp35iPcZS6EIwVMGrMMAwYtcRWlRIgzCpb8lgY='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>WhoHacker</title>
@@ -735,7 +735,6 @@ function patternsHTML(r,t){
   return `<div class="map">${cards.map(([h,f,d])=>`<div class="mcard"><h3>${h}</h3><p class="pfact">${f}</p><p>${d}</p></div>`).join('')}</div>`;
 }
 function mapHTML(a,s,b,extra){
-  const nocode=(s==='op'||s==='st')?`<div class="mcard wide"><h3>No code needed on this path</h3><p>${SN[s]} work runs on understanding systems and using tools well, like a Web Operator who lives in Burp Suite. You need to understand what code and requests do, but writing programs is optional. Coding widens your options. It does not gate entry.</p></div>`:'';
   return `<div class="map">
     ${extra||''}
     <div class="mcard"><h3>1. Common core</h3><ul>${CORE.map(c=>`<li>${c}</li>`).join('')}</ul></div>
@@ -743,7 +742,6 @@ function mapHTML(a,s,b,extra){
     <div class="mcard"><h3>3. Your lane adds</h3><p><b>${AN[a]}.</b> ${AADD[a]}.${b?` Secondary lane, ${AN[b]}: ${AADD[b]}.`:''}</p></div>
     <div class="mcard"><h3>Places to practice</h3><p>${AN[a]}: ${PRACTICE[a]}.${b?` ${AN[b]}: ${PRACTICE[b]}.`:''} Check that each is still available.</p></div>
     <div class="mcard"><h3>What transfers</h3><p>Trust boundaries, injection-style flaws and privilege models carry across every lane. Switching lanes means relearning the platform, not starting over.</p></div>
-    ${nocode}
   </div>`;
 }
 function tagCard(tag,note,key,acts){
