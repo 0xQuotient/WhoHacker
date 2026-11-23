@@ -49,7 +49,7 @@ This answers both assessments at random and prints how often each Archetype and 
 Built on two posts I wrote:
 
 - [Offensive Security Archetypes](https://paragraph.com/@derrickjr/osa), where the Archetypes and their classes come from
-- [Technical Hacking is Social](https://paragraph.com/@derrickjr/technical-hacking-is-social), which the coding notes on each Style follow
+- [Technical Hacking is Social](https://paragraph.com/@derrickjr/technical-hacking-is-social), on the technical-to-social spectrum of attacks
 
 ## Status
 

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-J8Bax+ZEkQlCTgrIqL61f1xarHL8ZfwUPWBoCqIVfDg='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-AnZ+mLp5IQuqA1tloMRJiQWCwQJemlPr2jRCN0sJc4c='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>WhoHacker</title>
@@ -298,12 +298,12 @@ const ADEF={
   ai:'Machine-learning systems and LLM-based applications'
 };
 const SDEF={
-  op:['Masters existing tools and techniques, then chains what they find','Coding: existing tools do most of the work'],
-  tool:['Builds custom offensive tooling: implants, C2, loaders, automation','Coding: writes custom programs'],
-  exp:['Turns a known bug into a reliable way in','Coding: writes custom, low-level code'],
-  res:['Discovers bugs nobody has reported yet','Coding: reads and writes code to find flaws'],
-  re:['Takes software, firmware or protocols apart to learn how they work','Coding: reads code, uses analysis tools'],
-  st:['Scouts the target, then plans where to hit and in what order','Coding: little needed']
+  op:['Keeps momentum: takes what already works and chains it, step by step, toward access','Produces: access'],
+  tool:['Builds custom offensive tooling: implants, C2, loaders, automation','Produces: a reusable tool'],
+  exp:['Turns a known bug into a reliable way in','Produces: a working exploit'],
+  res:['Discovers bugs nobody has reported yet','Produces: a new bug'],
+  re:['Takes software, firmware or protocols apart to learn how they work','Produces: an understanding'],
+  st:['Scouts the target, then plans where to hit and in what order','Produces: a plan']
 };
 /* Pairing validity per spec section 5. Columns follow SK order: op, tool, exp, res, re, st. Y common, R rare, N invalid. */
 const V={web:'YYRYRY',net:'YYYYYY',cloud:'YYNYNY',mob:'YRYYYR',cry:'RRYYRR',hum:'YYNRNY',iot:'YRYYYR',bin:'RYYYYN',ai:'YRRYRR'};
@@ -388,15 +388,15 @@ const QA=[
   {q:`Which news story would you most want to investigate?`,o:[[`Private company files left open on an online storage account`,'cloud'],[`A digital-money platform loses millions because of a bug in how it was built`,'cry'],[`A baby monitor or smart lock that strangers can control`,'iot'],[`A virtual assistant that leaks private details when asked the right way`,'ai']]}
 ];
 const QS=[
-  {q:`A company hires you to test its website login page. You find out it runs software with a publicly known flaw. What do you do next?`,o:[[`Run the standard tools for that flaw and see what they report`,'op'],[`Get a working break-in for it, and keep refining until it works every time`,'exp'],[`Write a small program that tests for it, so it can be reused on any site`,'tool'],[`Check whether it points to a bigger problem nobody has spotted yet`,'res']]},
-  {q:`You are handed a program you have never seen and a week to understand what it does. What do you do on day one?`,o:[[`Run it with the best-known tools and watch what happens`,'op'],[`Open it up and read how it is built`,'re'],[`Build a small helper that feeds it lots of input and logs the results`,'tool'],[`Find out who uses it, what it connects to, and what is worth reaching`,'st']]},
+  {q:`A company hires you to test its website login page. You find out it runs software with a publicly known flaw. What do you do next?`,o:[[`Use what already exists for that flaw, get in, and see where it leads`,'op'],[`Get a working break-in for it, and keep refining until it works every time`,'exp'],[`Write a small program that tests for it, so it can be reused on any site`,'tool'],[`Check whether it points to a bigger problem nobody has spotted yet`,'res']]},
+  {q:`You are handed a program you have never seen and a week to understand what it does. What do you do on day one?`,o:[[`Poke at it with tools you already know and follow whatever opens up`,'op'],[`Open it up and read how it is built`,'re'],[`Build a small helper that feeds it lots of input and logs the results`,'tool'],[`Find out who uses it, what it connects to, and what is worth reaching`,'st']]},
   {q:`A report says a popular program has a serious flaw, but no details are public. You have a free afternoon. What do you do?`,o:[[`Try to build a working break-in from the description`,'exp'],[`Compare the old and new versions of the program to see exactly what changed`,'re'],[`Test the code around it for similar flaws the report did not mention`,'res'],[`Work out which companies run it, to know who is affected first`,'st']]},
   {q:`Your team has a long list of targets, and a new break-in that works on only some of them. What do you do?`,o:[[`Make it work reliably on the ones where it fails`,'exp'],[`Study how the failing systems differ on the inside to find out why`,'re'],[`Automate it across the whole list`,'tool'],[`Sort the list by which targets matter most and what they would lead to`,'st']]},
   {q:`You have a spare weekend and a program that crashes when given strange input. What do you do?`,o:[[`Turn the crash into a working break-in`,'exp'],[`Trace the crash back to the exact spot that causes it`,'re'],[`Build a tool that finds crashes like it automatically`,'tool'],[`Hunt for other places in the program that fail in similar ways`,'res']]},
-  {q:`A client says their setup is secure and asks you to double-check. What do you do?`,o:[[`Run the standard checklist of tools and techniques against it`,'op'],[`Take apart how its protections actually work, piece by piece`,'re'],[`Look for a weakness that is on no checklist`,'res'],[`Map what connects to what, and where one slip could spread`,'st']]},
-  {q:`You keep repeating the same slow test by hand every week. What do you do about it?`,o:[[`Learn the best tools for it and get much faster`,'op'],[`Study the target to find out why the test is so slow`,'re'],[`Write a program that does it for you`,'tool'],[`Look for a completely different way to test it that few people use`,'res']]},
-  {q:`You have one day to show a client something convincing. What do you do?`,o:[[`Show results from the standard tools, clearly explained`,'op'],[`Show one break-in working live, start to finish`,'exp'],[`Spend the day looking for a flaw nobody has reported`,'res'],[`Show a plan: how an attacker would pick this company and move through it`,'st']]},
-  {q:`You are handed a folder of notes about a company you have been hired to test. What do you do first?`,o:[[`Pick the right ready-made tools for what the notes describe`,'op'],[`Find the weakest-looking spot and work out a break-in that succeeds`,'exp'],[`Turn the notes into a script that checks everything at once`,'tool'],[`Read everything, then decide the order of attack before touching anything`,'st']]}
+  {q:`A client says their setup is secure and asks you to double-check. What do you do?`,o:[[`Start with what usually works and follow whatever gives way`,'op'],[`Take apart how its protections actually work, piece by piece`,'re'],[`Look for a weakness that is on no checklist`,'res'],[`Map what connects to what, and where one slip could spread`,'st']]},
+  {q:`You keep repeating the same slow test by hand every week. What do you do about it?`,o:[[`Find a tool that already does it and get fast with it, so you can move on`,'op'],[`Study the target to find out why the test is so slow`,'re'],[`Write a program that does it for you`,'tool'],[`Look for a completely different way to test it that few people use`,'res']]},
+  {q:`You have one day to show a client something convincing. What do you do?`,o:[[`Show how far the usual tools got you in a day, and where you would go next`,'op'],[`Show one break-in working live, start to finish`,'exp'],[`Spend the day looking for a flaw nobody has reported`,'res'],[`Show a plan: how an attacker would pick this company and move through it`,'st']]},
+  {q:`You are handed a folder of notes about a company you have been hired to test. What do you do first?`,o:[[`Grab ready-made tools that fit the notes and start working through them`,'op'],[`Find the weakest-looking spot and work out a break-in that succeeds`,'exp'],[`Turn the notes into a script that checks everything at once`,'tool'],[`Read everything, then decide the order of attack before touching anything`,'st']]}
 ];
 const Q1=[...QA.map(x=>({...x,t:'a'})),...QS.map(x=>({...x,t:'s'}))];
 let QQ=Q1; /* the questions as asked this run: same set, shuffled order and option positions */
@@ -767,7 +767,7 @@ function decodeHTML(a,s,b,mode,r,h){
     <div class="half ha"><p class="hl">Archetype</p><p class="hn">${aname}</p><p class="hq">Where you hack</p>${adef}</div>
     <div class="half hs"><p class="hl">Style</p><p class="hn">${SN[s]}</p><p class="hq">How you hack</p><p class="hd">${SDEF[s][0]}.</p><p class="hc">${SDEF[s][1]}</p></div>
   </div>
-  <div class="card note"><h3>Coding is not a skill level</h3><p>Each Style lists how much coding its work involves. That describes the work, not how good someone is. An Operator who does everything in Burp Suite or another point-and-click tool can be an expert hacker.</p></div>
+  <div class="card note"><h3>Style is not a skill level</h3><p>Each Style lists what its work produces. That describes the work, not how good someone is. An Operator who does everything in Burp Suite or another point-and-click tool can be an expert hacker.</p></div>
   <div class="card read"><h3>Reading the symbols</h3><ul>
     <li><span class="sym">×</span><span><b>Evenly split.</b> Network × Cloud means both lanes are about equally strong.</span></li>
     <li><span class="sym">( )</span><span><b>Secondary.</b> Web (IoT) means mostly Web with some IoT. Out loud: “primarily web with some IoT.”</span></li>
